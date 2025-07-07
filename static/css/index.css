@@ -1,0 +1,309 @@
+body {
+  font-family: 'Noto Sans', sans-serif;
+}
+
+
+.footer .icon-link {
+    font-size: 25px;
+    color: #000;
+}
+
+.link-block a {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.dnerf {
+  font-variant: small-caps;
+}
+
+
+.teaser .hero-body {
+  padding-top: 0;
+  padding-bottom: 3rem;
+}
+
+.teaser {
+  font-family: 'Google Sans', sans-serif;
+}
+
+
+.publication-title {
+}
+
+.publication-banner {
+  max-height: parent;
+
+}
+
+.publication-banner video {
+  position: relative;
+  left: auto;
+  top: auto;
+  transform: none;
+  object-fit: fit;
+}
+
+.publication-header .hero-body {
+}
+
+.publication-title {
+    font-family: 'Google Sans', sans-serif;
+}
+
+.publication-authors {
+    font-family: 'Google Sans', sans-serif;
+}
+
+.publication-venue {
+    color: #555;
+    width: fit-content;
+    font-weight: bold;
+}
+
+.publication-awards {
+    color: #ff3860;
+    width: fit-content;
+    font-weight: bolder;
+}
+
+.publication-authors {
+}
+
+.publication-authors a {
+   color: hsl(204, 86%, 53%) !important;
+}
+
+.publication-authors a:hover {
+    text-decoration: underline;
+}
+
+.author-block {
+  display: inline-block;
+}
+
+.publication-banner img {
+}
+
+.publication-authors {
+  /*color: #4286f4;*/
+}
+
+.publication-video {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%;
+
+    overflow: hidden;
+    border-radius: 10px !important;
+}
+
+.publication-video iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.publication-body img {
+}
+
+.results-carousel {
+  overflow: hidden;
+}
+
+.results-carousel .item {
+  margin: 5px;
+  overflow: hidden;
+  border: 1px solid #bbb;
+  border-radius: 10px;
+  padding: 0;
+  font-size: 0;
+}
+
+.results-carousel video {
+  margin: 0;
+}
+
+
+.interpolation-panel {
+  background: #f5f5f5;
+  border-radius: 10px;
+}
+
+.interpolation-panel .interpolation-image {
+  width: 100%;
+  border-radius: 5px;
+}
+
+.interpolation-video-column {
+}
+
+.interpolation-panel .slider {
+  margin: 0 !important;
+}
+
+.interpolation-panel .slider {
+  margin: 0 !important;
+}
+
+#interpolation-image-wrapper {
+  width: 100%;
+}
+#interpolation-image-wrapper img {
+  border-radius: 5px;
+}
+
+/* index.css */
+
+/* === Solution for Carousel Item Sizing === */
+
+/* Ensure the carousel wrapper properly contains its items */
+/* This helps prevent items from overflowing or wrapping unexpectedly */
+.results-carousel {
+    overflow: hidden; /* Already set, but good to double check */
+    width: 100%; /* Make sure carousel itself takes full available width */
+    position: relative; /* Often needed for positioning carousel controls */
+}
+
+/* Force each carousel item to take 100% width of the carousel's display area */
+/* This is crucial for slidesToShow: 1 to work as expected,
+   preventing multiple items from appearing side-by-side on smaller screens. */
+.results-carousel .item {
+    flex-shrink: 0; /* Prevents items from shrinking below their content size */
+    width: 100% !important; /* Force full width for each item in the visible viewport */
+    display: block !important; /* Ensure it behaves like a block element if not already */
+    /* Adjust margin and padding for the item itself */
+    margin: 0; /* Remove any default margins on the item */
+    padding: 0; /* Remove any default padding on the item */
+    box-sizing: border-box; /* Include padding/border in the width calculation */
+}
+
+/* Ensure the table inside the item is also correctly sized */
+.results-carousel .item table {
+    width: 100% !important; /* Ensure the table fills its parent item's width */
+    table-layout: fixed;    /* Prevents table cells from expanding unexpectedly */
+    border-collapse: collapse; /* Often good for consistent cell spacing */
+    margin: 0; /* Remove any default table margins */
+    padding: 0; /* Remove any default table padding */
+}
+
+/* Ensure table cells (td) within the item adjust correctly */
+.results-carousel .item table td {
+    width: 33.33% !important; /* Each cell takes 1/3 of the table width */
+    padding: 0.5% !important; /* Adjust this for spacing between videos, e.g., 0.5% for slight gap */
+    vertical-align: middle;
+    box-sizing: border-box; /* Include padding in cell width */
+}
+
+/* Adjust video sizing within the cells */
+.results-carousel .item video {
+    width: 100% !important; /* Make video fill its td */
+    height: auto !important; /* Maintain aspect ratio */
+    display: block; /* Remove extra space below video */
+    margin: 0 auto; /* Center video if there's any remaining space */
+    border-radius: 10px; /* Keep your existing border-radius */
+}
+
+/* === Qualitative Comparison Section Specific Padding (from previous discussion) === */
+/* Keep these rules if you want to reduce outer margins for this section */
+#qualitative-comparisons-section .hero-body {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 3rem !important;
+}
+
+@media screen and (max-width: 768px) {
+    #qualitative-comparisons-section .hero-body {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+}
+
+#qualitative-comparisons-section .container {
+    padding-left: 0rem !important;
+    padding-right: 0rem !important;
+}
+
+@media screen and (max-width: 768px) {
+    #qualitative-comparisons-section .container {
+        padding-left: 0rem !important;
+        padding-right: 0rem !important;
+    }
+}
+
+#qualitative-comparisons-section .column {
+    padding-left: 0rem !important;
+    padding-right: 0rem !important;
+}
+
+@media screen and (max-width: 768px) {
+    #qualitative-comparisons-section .column {
+        padding-left: 0rem !important;
+        padding-right: 0rem !important;
+    }
+}
+
+/* Base style for video labels (default for desktop/larger screens) */
+.video-label {
+    text-align: center;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    font-size: 1.2vw;
+}
+
+/* Media query for mobile devices (screens up to 768px wide) */
+@media screen and (max-width: 768px) {
+    .video-label {
+        font-size: 2.2vw !important; /* Larger font size for mobile, adjust as needed */
+        /* You could also use a fixed unit like px or rem here for more control */
+        /* font-size: 16px !important; */
+        /* font-size: 1rem !important; */
+    }
+}
+
+#ablation-studies-section summary {
+    /* 이 부분이 실제 클릭 가능한 영역입니다. */
+    cursor: pointer; /* 클릭 가능한 요소임을 명확히 표시 */
+    display: block; /* padding, margin, background, shadow 적용을 위해 블록 요소처럼 동작 */
+    padding: 15px 20px; /* 클릭 영역을 넓게 설정 */
+    border-radius: 8px; /* 둥근 모서리 */
+    background-color: #f5f5f5; /* 기본 배경색 */
+    margin-bottom: 20px; /* 아래 내용과의 간격 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* 기본 그림자 (선택 사항) */
+    
+    /* 호버 시 부드러운 전환 효과 */
+    transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+#ablation-studies-section summary:hover {
+    background-color: #e0e0e0; /* 호버 시 배경색 변경 */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* 호버 시 그림자 강조 */
+}
+#ablation-studies-section .details-summary-title {
+    /* Bulma .title.is-3의 기본 속성 (필요시 bulma.min.css에서 정확한 값 확인) */
+    font-size: 2rem !important; /* 기본 폰트 크기 */
+    line-height: 1.125 !important;
+    font-weight: 600 !important;
+    color: #363636 !important; /* 기본 텍스트 색상 */
+    
+    /* 호버 시 폰트 크기 및 색상 변화를 위한 transition */
+    transition: font-size 0.2s ease-in-out, color 0.2s ease-in-out, transform 0.2s ease-in-out;
+    display: inline-block; /* transform이 적용되도록 */
+    
+    /* HTML에서 옮겨온 인라인 스타일. 필요에 따라 조정. */
+    margin-top: -20px; /* 이 마진이 h2에 적용되는 건지 확인 필요 (summary의 padding과 겹칠 수 있음) */
+    margin-bottom: 0; /* h2 자체의 기본 마진이 summary의 padding과 겹치지 않도록 */
+}
+#ablation-studies-section .details-summary-title:hover {
+    /* 호버 시 Bulma .title.is-2에 해당하는 속성 */
+    font-size: 2.2rem !important; /* is-2의 폰트 사이즈로 확대 */
+    color: hsl(204, 86%, 53%) !important; /* Bulma 링크 색상으로 변경 */
+    /* transform: scale(1.05); /* 폰트 크기 변화 외에 추가적인 확대 효과를 원한다면 */
+}
+
+.contributors, #contributors {
+  display: none !important;
+}

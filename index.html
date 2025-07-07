@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="Learning to Track Any Points from Human Motion">
+  <meta name="keywords" content="AnthroTAP, Anthro-LD, Point tracking, Track Any Point (TAP)">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Learning to Track Any Points from Human Motion</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+        rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <script src="./static/js/index.js"></script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+
+<nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <a class="navbar-item" href="https://cvlab.kaist.ac.kr/">
+        <span class="icon">
+            <i class="fas fa-home"></i>
+        </span>
+      </a>
+
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          More Research
+        </a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item" href="https://openaccess.thecvf.com/content/CVPR2024/papers/Cho_FlowTrack_Revisiting_Optical_Flow_for_Long-Range_Dense_Tracking_CVPR_2024_paper.pdf">
+            FlowTrack
+          </a>
+          <a class="navbar-item" href="https://cvlab-kaist.github.io/locotrack/">
+            LocoTrack
+          </a>
+          <a class="navbar-item" href="https://cvlab-kaist.github.io/Chrono/">
+            Chrono
+          </a>
+          <a class="navbar-item" href="https://seurat-cvpr.github.io/">
+            Seurat
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</nav>
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-2 publication-title">
+            Learning to Track Any Points from Human Motion
+          </h1>
+          
+          <div class="is-size-5 publication-authors">
+            <span class="author-block">
+              <a href="https://ines-hyeonsu-kim.github.io">Inès Hyeonsu Kim</a><sup>1*</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://seokju-cho.github.io">Seokju Cho</a><sup>1*</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://github.com/koojahyeok">Jahyeok Koo</a><sup>1</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://junghyun-james-park.github.io/">Junghyun Park</a><sup>1</sup>,
+            </span>
+            <br>
+            <span class="author-block">
+              <a href="https://gabriel-huang.github.io">Jiahui Huang</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://joonyoung-cv.github.io">Joon-Young Lee</a><sup>2</sup>,
+            </span>
+            <span class="author-block">
+              <a href="https://cvlab.kaist.ac.kr/">Seungryong Kim</a><sup>1</sup>
+            </span>
+          </div>
+
+          <div class="is-size-5 publication-authors">
+            <span class="author-block"><sup>1</sup>KAIST AI,</span>
+            <span class="author-block"><sup>2</sup>Adobe Research</span>
+          </div>
+
+          <div class="is-size-6 publication-authors">
+            <span class="author-block"><sup>*</sup>Equal Contribution</span>
+          </div>
+
+          <div class="is-size-6 publication-authors" style="margin-top: 10px">
+            <span class="author-block"><b>ArXiv 2025</b></span>
+          </div>
+
+          <div class="column has-text-centered">
+            <div class="publication-links">
+              <!-- PDF Link. -->
+              <span class="link-block">
+                <a href=""
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-file-pdf"></i>
+                  </span>
+                  <span>Paper (comming Soon)</span>
+                </a>
+              </span>
+              <span class="link-block">
+                <a href=""
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv (comming Soon)</span>
+                </a>
+              </span>
+              <!-- Code Link. -->
+              <span class="link-block">
+                <a href="https://github.com/cvlab-kaist/AnthroTAP"
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fab fa-github"></i>
+                  </span>
+                  <span>Code (comming Soon)</span>
+                  </a>
+              </span>
+              <!-- Dataset Link. -->
+              <span class="link-block">
+                <a href=""
+                   class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                      <i class="fas fa-database"></i>
+                  </span>
+                  <span>Data (comming Soon)</span>
+                  </a>
+              </span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <div id="teaser-videos-mobile" style="display: none;">
+        <div class="columns is-multiline is-centered">
+          <div class="column is-one-half has-text-centered"><div class="vsc-controller"></div>
+            <video preload="metadata" poster="./static/images/0_300.jpg" width="100%" autoplay="" muted=""  loop="" playsinline="">
+              <source src="./static/videos/0_300.mp4" type="video/mp4">
+            </video>
+            <video preload="metadata" poster="./static/images/1_300.jpg" width="100%" autoplay="" muted=""  loop="" playsinline="">
+              <source src="./static/videos/1_300.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+      <div id="teaser-carousel-computer" class="carousel results-carousel" style="margin-top: -25px;">
+        <div class="item dancetrack-0"><div class="vsc-controller"></div>
+          <video preload="metadata" poster="./static/images/0_300.jpg" width="100%" autoplay="" muted=""  loop="" playsinline="">
+            <source src="./static/videos/0_300.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item dancetrack-1"><div class="vsc-controller"></div>
+          <video preload="metadata" poster="./static/images/1_300.jpg" width="100%" autoplay="" muted=""  loop="" playsinline="" loading="lazy">
+            <source src="./static/videos/1_300.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item dancetrack-4"><div class="vsc-controller"></div>
+          <video preload="metadata" poster="./static/images/4_300.jpg" width="100%" autoplay="" muted=""  loop="" playsinline="" loading="lazy">
+            <source src="./static/videos/4_300.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item dancetrack-26"><div class="vsc-controller"></div>
+          <video preload="metadata" poster="./static/images/26_300.jpg" width="100%" autoplay="" muted=""  loop="" playsinline="" loading="lazy">
+            <source src="./static/videos/26_300.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item dancetrack-31"><div class="vsc-controller"></div>
+          <video preload="metadata" poster="./static/images/31_300.jpg" width="100%" autoplay="" muted=""  loop="" playsinline="" loading="lazy">
+            <source src="./static/videos/31_300.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item dancetrack-43"><div class="vsc-controller"></div>
+          <video preload="metadata" poster="./static/images/43_300.jpg" width="100%" autoplay="" muted=""  loop="" playsinline="">
+            <source src="./static/videos/43_300.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item dancetrack-49"><div class="vsc-controller"></div>
+          <video preload="metadata" poster="./static/images/49_300.jpg" width="100%" autoplay="" muted=""  loop="" playsinline="">
+            <source src="./static/videos/49_300.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item dancetrack-51"><div class="vsc-controller"></div>
+          <video preload="metadata" poster="./static/images/51_300.jpg" width="100%" autoplay="" muted=""  loop="" playsinline="">
+            <source src="./static/videos/51_300.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item ld-212"><div class="vsc-controller"></div>
+          <video preload="metadata" poster="./static/images/212_300.jpg" width="100%" autoplay="" muted=""  loop="" playsinline="">
+            <source src="./static/videos/212_300.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item ld-267"><div class="vsc-controller"></div>
+          <video preload="metadata" poster="./static/images/267_241.jpg" width="100%" autoplay="" muted=""  loop="" playsinline="">
+            <source src="./static/videos/267_241.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item ld-368"><div class="vsc-controller"></div>
+          <video preload="metadata" poster="./static/images/368_300.jpg" width="100%" autoplay="" muted=""  loop="" playsinline="" loading="lazy">
+            <source src="./static/videos/368_300.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item ld-563"><div class="vsc-controller"></div>
+          <video preload="metadata" poster="./static/images/563_300.jpg" width="100%" autoplay="" muted=""  loop="" playsinline="" loading="lazy">
+            <source src="./static/videos/563_300.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item ld-567"><div class="vsc-controller"></div>
+          <video preload="metadata" poster="./static/images/567_300.jpg" width="100%" autoplay="" muted=""  loop="" playsinline="">
+            <source src="./static/videos/567_300.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item ld-704"><div class="vsc-controller"></div>
+          <video preload="metadata" poster="./static/images/704_300.jpg" width="100%" autoplay="" muted=""  loop="" playsinline="">
+            <source src="./static/videos/704_300.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item ld-710"><div class="vsc-controller"></div>
+          <video preload="metadata" poster="./static/images/710_300.jpg" width="100%" autoplay="" muted=""  loop="" playsinline="" loading="lazy">
+            <source src="./static/videos/710_300.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item ld-731"><div class="vsc-controller"></div>
+          <video preload="metadata" poster="./static/images/731_300.jpg" width="100%" autoplay="" muted=""  loop="" playsinline="">
+            <source src="./static/videos/731_300.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item ld-751"><div class="vsc-controller"></div>
+          <video preload="metadata" poster="./static/images/751_251.jpg" width="100%" autoplay="" muted=""  loop="" playsinline="">
+            <source src="./static/videos/751_251.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="item ld-880"><div class="vsc-controller"></div>
+          <video preload="metadata" poster="./static/images/880_300.jpg" width="100%" autoplay="" muted=""  loop="" playsinline="" loading="lazy">
+            <source src="./static/videos/880_300.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+      <h2 class="subtitle has-text-centered" style="margin-top: 10px">
+        <b>TL;DR:</b> AnthroTAP generates highly complex pseudo-labeled data for point tracking <br>
+        by leveraging the inherent complexities of human motion captured in videos.
+      </h2>
+    </div>
+  </div>
+</section>
+
+
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <!-- Abstract. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3" style="margin-top: -20px">Abstract</h2>
+        <div class="content has-text-justified">
+          <p>
+            Human motion, with its inherent complexities, such as non-rigid deformations,
+            articulated movements, clothing distortions, and frequent occlusions caused by
+            limbs or other individuals, provides a rich and challenging source of supervision that
+            is crucial for training robust and generalizable point trackers. Despite the suitability
+            of human motion, acquiring extensive training data for point tracking remains
+            difficult due to laborious manual annotation. 
+          </p>
+
+          <p>
+            Our proposed pipeline, <b>AnthroTAP</b>,
+            addresses this by proposing an automated pipeline to generate pseudo-labeled
+            training data, leveraging the Skinned Multi-Person Linear (SMPL) model. We
+            first fit the SMPL model to detected humans in video frames, project the resulting
+            3D mesh vertices onto 2D image planes to generate pseudo-trajectories, handle
+            occlusions using ray-casting, and filter out unreliable tracks based on optical flow
+            consistency. 
+          </p>
+
+          <p>
+            A point tracking model trained on AnthroTAP annotated dataset
+            achieves state-of-the-art performance on the TAP-Vid benchmark, surpassing other
+            models trained on real videos while using \( 10,000\times \) less data and only 1 day in 4
+            GPUs, compared to 256 GPUs used in recent state-of-the-art.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!--/ Abstract. -->
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Overall Pipeline. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3" style="margin-top: -10px">Overall Pipeline</h2>
+
+        <img src="static/images/overall-pipeline.png" class="center">
+
+        <div class="content has-text-justified" style="margin-top: 15px; text-align: left;">
+          <b>AnthroTAP</b> extract human meshes using an off-the-shelf human mesh recovery model, and track points by projecting the mesh vertices.
+          Point visibility is determined by using ray-casting.
+          In parallel, we extract optical flow and retain only reliable flow using forward-backward consistency.
+          Finally, to enhance pseudo-label reliability, trajectories are filtered by checking the consistency between the optical flow and the trajectories generated from the human mesh.
+        </div>
+      </div>
+    </div>
+    <!-- Overall Pipeline. -->
+  </div>
+</section>
+
+
+<section class="section" style="padding-top: 0;" id="qualitative-comparisons-section">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <!-- Qualtitative Comparison. -->
+      <div class="column is-full-width">
+        <h2 class="title is-3 has-text-centered" style="margin-top: 30px">Qualitative Comparisons</h2>
+        <div class="content has-text-centered has-text-justified" style="margin-top: 15px; text-align: left;">
+          Compared to previous state-of-the-art methods, <b>Anthro-LocoTrack</b>, LocoTrack-base model
+          trained with the dataset generated by our pipeline, consistently demonstrates strong performance
+          on highly deformable objects and severe occlusions. 
+        </div>
+        <table style="width:100%;border:0px;border-spacing:0px;border-collapse:separate;margin-right:auto;margin-left:auto;">
+          <tbody>
+            <tr style="padding:0px">
+              <td style="padding-right:1%;width:32%;vertical-align:middle">
+                <p class="video-label">CoTracker3</p>
+              </td>
+              <td style="padding-right:1%;width:32%;vertical-align:middle">
+                <p class="video-label">BootsTAPIR</p>
+              </td>
+              <td style="padding-right:1%;width:32%;vertical-align:middle">
+                <p class="video-label"><b>Anthro-LocoTrack (Ours)</b> </p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div id="qual-carousel" class="carousel results-carousel">
+          <div class="item item-dog-agility">
+            <table style="margin-top: -10px">
+              <tbody>
+                <tr style="padding:0px">
+                  <td style="padding-right:1%;width:32%;vertical-align:middle"><div class="vsc-controller"></div>
+                    <video preload="none" poster="./static/images/cotrack_dog-agility_0.jpg" onloadstart="this.playbackRate = 0.8;" autoplay muted loop playsinline height="100%" loading="lazy">
+                      <source src="./static/videos/cotrack_dog-agility_0.mp4" type="video/mp4">Sorry, your browser doesn't support embedded
+                      videos.
+                    </video>
+                  </td>
+                  <td style="padding-right:1%;width:32%;vertical-align:middle"><div class="vsc-controller"></div>
+                    <video preload="none" poster="./static/images/boots_dog-agility_0.jpg" onloadstart="this.playbackRate = 0.8;" autoplay muted loop playsinline height="100%" loading="lazy">
+                      <source src="./static/videos/boots_dog-agility_0.mp4" type="video/mp4">Sorry, your browser doesn't support embedded
+                      videos.
+                    </video>
+                  </td>
+                  <td style="padding-right:1%;width:32%;vertical-align:middle"><div class="vsc-controller"></div>
+                    <video preload="none" poster="./static/images/ours_dog-agility_0.jpg" onloadstart="this.playbackRate = 0.8;" autoplay muted loop playsinline height="100%" loading="lazy">
+                      <source src="./static/videos/ours_dog-agility_0.mp4" type="video/mp4">Sorry, your browser doesn't support embedded
+                      videos.
+                    </video>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="item item-dogs-scale">
+            <table style="margin-top: -10px">
+              <tbody>
+                <tr style="padding:0px">
+                  <td style="padding-right:1%;width:32%;vertical-align:middle"><div class="vsc-controller"></div>
+                    <video preload="none" poster="./static/images/cotrack_dogs-scale_0.jpg" onloadstart="this.playbackRate = 0.8;" autoplay muted loop playsinline height="100%" loading="lazy">
+                      <source src="./static/videos/cotrack_dogs-scale_0.mp4" type="video/mp4">Sorry, your browser doesn't support embedded
+                      videos.
+                    </video>
+                  </td>
+                  <td style="padding-right:1%;width:32%;vertical-align:middle"><div class="vsc-controller"></div>
+                    <video preload="none" poster="./static/images/boots_dogs-scale_0.jpg" onloadstart="this.playbackRate = 0.8;" autoplay muted loop playsinline height="100%" loading="lazy">
+                      <source src="./static/videos/boots_dogs-scale_0.mp4" type="video/mp4">Sorry, your browser doesn't support embedded
+                      videos.
+                    </video>
+                  </td>
+                  <td style="padding-right:1%;width:32%;vertical-align:middle"><div class="vsc-controller"></div>
+                    <video preload="none" poster="./static/images/ours_dogs-scale_0.jpg" onloadstart="this.playbackRate = 0.8;" autoplay muted loop playsinline height="100%" loading="lazy">
+                      <source src="./static/videos/ours_dogs-scale_0.mp4" type="video/mp4">Sorry, your browser doesn't support embedded
+                      videos.
+                    </video>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="item item-varanus-cage">
+            <table style="margin-top: -10px">
+              <tbody>
+                <tr style="padding:0px">
+                  <td style="padding-right:1%;width:32%;vertical-align:middle"><div class="vsc-controller"></div>
+                    <video preload="none" poster="./static/images/cotrack_varanus-cage_0.jpg" onloadstart="this.playbackRate = 0.8;" autoplay muted loop playsinline height="100%" loading="lazy">
+                      <source src="./static/videos/cotrack_varanus-cage_0.mp4" type="video/mp4">Sorry, your browser doesn't support embedded
+                      videos.
+                    </video>
+                  </td>
+                  <td style="padding-right:1%;width:32%;vertical-align:middle"><div class="vsc-controller"></div>
+                    <video preload="none" poster="./static/images/boots_varanus-cage_0.jpg" onloadstart="this.playbackRate = 0.8;" autoplay muted loop playsinline height="100%" loading="lazy">
+                      <source src="./static/videos/boots_varanus-cage_0.mp4" type="video/mp4">Sorry, your browser doesn't support embedded
+                      videos.
+                    </video>
+                  </td>
+                  <td style="padding-right:1%;width:32%;vertical-align:middle"><div class="vsc-controller"></div>
+                    <video preload="none" poster="./static/images/ours_varanus-cage_0.jpg" onloadstart="this.playbackRate = 0.8;" autoplay muted loop playsinline height="100%" loading="lazy">
+                      <source src="./static/videos/ours_varanus-cage_0.mp4" type="video/mp4">Sorry, your browser doesn't support embedded
+                      videos.
+                    </video>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="item item-crossing">
+            <table style="margin-top: -10px">
+              <tbody>
+                <tr style="padding:0px">
+                  <td style="padding-right:1%;width:32%;vertical-align:middle"><div class="vsc-controller"></div>
+                    <video preload="none" poster="./static/images/cotrack_crossing_0.jpg" onloadstart="this.playbackRate = 0.8;" autoplay muted loop playsinline height="100%" loading="lazy">
+                      <source src="./static/videos/cotrack_crossing_0.mp4" type="video/mp4">Sorry, your browser doesn't support embedded
+                      videos.
+                    </video>
+                  </td>
+                  <td style="padding-right:1%;width:32%;vertical-align:middle"><div class="vsc-controller"></div>
+                    <video preload="none" poster="./static/images/boots_crossing_0.jpg" onloadstart="this.playbackRate = 0.8;" autoplay muted loop playsinline height="100%" loading="lazy">
+                      <source src="./static/videos/boots_crossing_0.mp4" type="video/mp4">Sorry, your browser doesn't support embedded
+                      videos.
+                    </video>
+                  </td>
+                  <td style="padding-right:1%;width:32%;vertical-align:middle"><div class="vsc-controller"></div>
+                    <video preload="none" poster="./static/images/ours_crossing_0.jpg" onloadstart="this.playbackRate = 0.8;" autoplay muted loop playsinline height="100%" loading="lazy">
+                      <source src="./static/videos/ours_crossing_0.mp4" type="video/mp4">Sorry, your browser doesn't support embedded
+                      videos.
+                    </video>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!-- Qualtitative Comparison. -->
+    </div>
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Quantitative Comparison. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3" style="margin-top: -20px">Quantitative Comparison</h2>
+
+        <img src="static/images/main-quan.png" class="center">
+        <div class="content has-text-justified" style="margin-top: 15px; text-align: left;">
+          LocoTrack-B, trained with our approach, shows a significant performance improvement across all metrics
+          and datasets on <b>TAP-Vid benchmark</b> and <b>RoboTAP</b>, even with \( 11\times \) smaller training dataset
+          than CoTracker3 in terms of the number of videos, and \( 1,000\times \) smaller dataset used in BootsTAPIR
+          in terms of the number of training frames.
+          
+          Furthermore, in terms of position accuracy (\(< δ_{avg}^x \)), our model achieves the best performance on every dataset.
+        </div>
+      </div>
+    </div>
+    <!-- Quantitative Comparison. -->
+  </div>
+</section>
+
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Ablation Studies. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3" style="margin-top: -10px; display: inline;">Ablation Studies</h2>
+
+        <div class="content" style="margin-top: 20px;">
+            <img src="static/images/ablation-table2.png" style="width: 70%; display: block; margin: 0 auto;">
+            <div class="content has-text-justified" style="margin-top: 15px; text-align: left;">
+              To examine whether training on human points generalize to non-human points,
+              we grouped query points in the TAP-Vid-DAVIS dataset into human and non-human regions
+              and compared performance.
+              Our method shows greater improvement on non-human points.
+            </div>
+
+            <img src="static/images/ablation-table3.png" style="width: 70%; display: block; margin: 0 auto;">
+            <div class="content has-text-justified" style="margin-top: 15px; text-align: left;">
+              We compare our pipeline with self-training introduced in Karaev <i>et al.</i>.
+              <b>(I)</b> CoTracker3 model trained on Kubric.
+              <b>(II)</b> fine-tunes the model on the Let’s Dance (LD) dataset using the self-training introduced in the paper.
+              <b>(III)</b> trains CoTracker3 model using our pipeline.
+              Our method shows greater performance boost than self-training introduced in CoTracker3.
+            </div>
+
+            <img src="static/images/ablation-table45.png" style="width: 85%; display: block; margin: 0 auto;">
+            <div class="content has-text-justified" style="margin-top: 15px; text-align: left;">
+              We ablate the effect of optical flow-based filtering by comparing it with the baseline
+              that uses trajectories projected from the human mesh and occlusion prediction via ray casting.
+              While the baseline already achieves strong performance, applying trajectory rejection yields a further performance boost <br><br>
+
+              We also provide a comparative analysis of prevalent point tracking training datasets, focusing on trajectory complexity and diversity.
+            </div>
+          </div>
+      </div>
+    </div>
+    <!-- Ablation Studies. -->
+  </div>
+</section>
+
+
+<section class="section">
+  <div class="container is-max-desktop">
+    <!-- Concurrent Work. -->
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-full-width">
+        <h2 class="title is-3">Related Links</h2>
+
+        <div class="content has-text-justified">
+          <p>
+            <a href="https://openaccess.thecvf.com/content/CVPR2024/papers/Cho_FlowTrack_Revisiting_Optical_Flow_
+            for_Long-Range_Dense_Tracking_CVPR_2024_paper.pdf">FlowTrack</a> proposes a novel framework
+            for long-range dense tracking by combining strengths of both optical flow and point tracking.
+            It chains confident optical flow predictions while automatically switching to an error
+            compensation module when flow becomes unreliable.
+          </p>
+          <p>
+            <a href="https://cvlab-kaist.github.io/locotrack/">LocoTrack</a> introduces local 4D correlation
+            to overcome matching ambiguities from local 2D correlation.
+            It incorporates a lightweight correlation encoder to enhance computational efficiency,
+            and compact Transformer architecture to integrate long-term temporal information.
+          </p>
+          <p>
+            <a href="https://cvlab-kaist.github.io/Chrono/">Chrono</a> designs a novel feature backbone which
+            leverages pre-trained representation from DINOv2 with a temporal adapter.
+            It effectively captures long-temporal context even without a refinement stage.
+          </p>
+          <p>
+            <a href="https://seurat-cvpr.github.io/">Seurat</a> presents a monocular video depth estimation 
+            framework that leverages 2D point trajectories to infer depth. It utilizes both spatial and temporal 
+            transformers to model accurate and temporally consistent depth predictions across frames.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Concurrent Work. -->
+  </div>
+</section>
+
+
+<section class="section" id="BibTeX">
+  <div class="container is-max-desktop content">
+    <h2 class="title">BibTeX</h2>
+    <pre><code>@article{kim2025learning,
+  author    = {Kim, In{\`e}s Hyeonsu and Cho, Seokju and Koo, Jahyeok and Park, Junghyun and Huang, Jiahui and Lee, Joon-Young and Kim, Seungryong},
+  title     = {Learning to Track Any Points from Human Motion},
+  journal   = {arXiv preprint},
+  year      = {2025},
+}</code></pre>
+  </div>
+</section>
+
+
+<footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+          <p>
+            This website is licensed under a <a rel="license"
+                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
+            Commons Attribution-ShareAlike 4.0 International License</a>.
+          </p>
+          <p>
+            Website adapted from the following <a
+              href="https://github.com/nerfies/nerfies.github.io">source code</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- <script>
+document.addEventListener('DOMContentLoaded', () => {
+  const base = document.getElementById('teaser-carousel-computer');
+  const isMobile = window.innerWidth <= 768 || /Mobi|Android/i.test(navigator.userAgent);
+  base.id = isMobile ? 'teaser-carousel-mobile' : 'teaser-carousel-computer';
+});
+</script> -->
+</body>
+
+</html>
