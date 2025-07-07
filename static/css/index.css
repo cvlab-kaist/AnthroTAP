@@ -303,7 +303,3 @@ body {
     color: hsl(204, 86%, 53%) !important; /* Bulma 링크 색상으로 변경 */
     /* transform: scale(1.05); /* 폰트 크기 변화 외에 추가적인 확대 효과를 원한다면 */
 }
-
-.contributors, #contributors {
-  display: none !important;
-}
