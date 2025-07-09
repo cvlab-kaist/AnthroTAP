@@ -7,7 +7,7 @@
 
 <span style="font-size: 1.5em;"><b>arXiv 2025</b></span>
 
-<a href=""><img src='https://img.shields.io/badge/arXiv-AnthroTAP-red' alt='Paper PDF'></a>
+<a href="https://arxiv.org/abs/2507.06233"><img src='https://img.shields.io/badge/arXiv-AnthroTAP-red' alt='Paper PDF'></a>
 <a href='https://cvlab-kaist.github.io/AnthroTAP/'><img src='https://img.shields.io/badge/Project_Page-AnthroTAP-green' alt='Project Page'></a>
 
 
