@@ -1,5 +1,5 @@
 <div align="center">
-<h1>AnthroTAP: Learning Point Tracking with Real-World Motion</h1>
+<h2>AnthroTAP: Learning Point Tracking with Real-World Motion</h2>
 
 [**Inès Hyeonsu Kim**](https://sites.google.com/view/ines-hyeonsu-kim/home)<sup>1,3*</sup> · [**Seokju Cho**](https://sites.google.com/view/seokjucho/home)<sup>1*</sup> · [**Jahyeok Koo**](https://scholar.google.com/citations?user=1Vl37dcAAAAJ&hl=ko)<sup>1</sup> · [**Junghyun Park**](https://junghyun-james-park.github.io/)<sup>1</sup><br>[**Jiahui Huang**](https://gabriel-huang.github.io)<sup>2</sup> · [**Honglak lee**](https://web.eecs.umich.edu/~honglak/)<sup>3,4</sup> · [**Joon-Young Lee**](https://joonyoung-cv.github.io)<sup>2</sup>  · [**Seungryong Kim**](https://cvlab.kaist.ac.kr/)<sup>1</sup>
 
