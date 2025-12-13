@@ -12,3 +12,55 @@
 
 
 </div>
+
+
+## Preparing the Environment
+
+```bash
+git clone https://github.com/cvlab-kaist/AnthroTAP
+cd AnthroTAP/locotrack_pytorch/
+git clone https://github.com/google-research/kubric.git # Optional, only for training.
+
+conda create -n locotrack-pytorch python=3.11
+conda activate locotrack-pytorch
+
+pip install torch torchvision torchaudio lightning==2.3.3 tensorflow_datasets tensorflow matplotlib mediapy tensorflow_graphics einops wandb
+```
+
+## LocoTrack Evaluation
+
+### 1. Download Pre-trained Weights
+
+To evaluate LocoTrack on the benchmarks, first download the pre-trained weights from [Link](https://drive.google.com/file/d/1Rj7sIby_ylZkuy4pccAA28dtqvJQUH-A).
+
+Alternatively, you can download the pre-trained weights using the following command:
+
+```bash
+gdown 1Rj7sIby_ylZkuy4pccAA28dtqvJQUH-A
+```
+
+### 3. Run Evaluation
+
+To evaluate the LocoTrack model, use the `experiment.py` script with the following command-line arguments:
+
+```bash
+python experiment.py --config config/default.ini --mode eval_{dataset_to_eval_1}_..._{dataset_to_eval_N}[_q_first] --ckpt_path /path/to/checkpoint --save_path ./path_to_save_checkpoints/
+```
+
+- `--config`: Specifies the path to the configuration file. Default is `config/default.ini`.
+- `--mode`: Specifies the mode to run the script. Use `eval` to perform evaluation. You can also include additional options for query first mode (`q_first`), and the name of the evaluation datasets. For example:
+  - Evaluation of the DAVIS dataset: `eval_davis`
+  - Evaluation of DAVIS and RoboTAP in query first mode: `eval_davis_robotap_q_first`
+- `--ckpt_path`: Specifies the path to the checkpoint file. If not provided, the script will use the default checkpoint.
+- `--save_path`: Specifies the path to save logs. 
+
+Replace `/path/to/checkpoint` with the actual path to your checkpoint file. This command will run the evaluation process and save the results in the specified `save_path`.
+
+Example:
+```bash
+python experiment.py \
+--config config/default.ini \
+--mode eval_davis_q_first \
+--save_path ./log \
+--ckpt_path ./Anthro-LocoTrack.ckpt
+```
