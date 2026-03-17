@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Background circle -->
+  <circle cx="32" cy="32" r="30" fill="#02a94c" />
+
+  <!-- Main roof (curved) -->
+  <path d="M10 34 Q32 18 54 34" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Second roof layer -->
+  <path d="M15 38 Q32 26 49 38" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Pillars -->
+  <line x1="20" y1="38" x2="20" y2="50" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="32" y1="34" x2="32" y2="50" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+  <line x1="44" y1="38" x2="44" y2="50" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Base/platform -->
+  <line x1="14" y1="50" x2="50" y2="50" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Roof tip ornament -->
+  <circle cx="32" cy="22" r="2" fill="#fff"/>
+</svg>

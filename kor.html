@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-TNC295S7');</script>
+    <!-- End Google Tag Manager -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>서울 월드 모델: 실제 도시 기반의 월드 시뮬레이션 모델</title>
+    <meta name="description"
+        content="Seoul World Model: 서울 월드 모델">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://seoul-world-model.github.io/kor.html">
+    <meta property="og:title" content="Seoul World Model - 서울 월드 모델">
+    <meta property="og:description"
+        content="월드 모델이 상상 속 공간이 아닌, 우리의 실제 도시를 모델링할 수 있다면 어떨까요? 서울 월드 모델은 실제 도시를 자유롭게 탐색할 수 있는 최초의 비디오 월드 모델입니다.">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title"
+        content="Seoul World Model - 서울 월드 모델">
+
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+    <link rel="icon" type="image/png" sizes="256x256" href="assets/favicon-256.png">
+    <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-64.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+
+    <!-- Fonts and Icons -->
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.1/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TNC295S7"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <a href="#tldr" class="sidebar-item">
+            <div class="sidebar-dot"></div>
+            <span class="sidebar-label">TL;DR</span>
+        </a>
+        <a href="#demo-text" class="sidebar-item">
+            <div class="sidebar-dot"></div>
+            <span class="sidebar-label">텍스트 제어</span>
+        </a>
+        <a href="#demo-trajectory" class="sidebar-item">
+            <div class="sidebar-dot"></div>
+            <span class="sidebar-label">장거리 생성</span>
+        </a>
+        <a href="#demo-navigation" class="sidebar-item">
+            <div class="sidebar-dot"></div>
+            <span class="sidebar-label">자유 탐색</span>
+        </a>
+        <a href="#demo-rag" class="sidebar-item">
+            <div class="sidebar-dot"></div>
+            <span class="sidebar-label">RAG 시각화</span>
+        </a>
+        <a href="#data-overview" class="sidebar-item">
+            <div class="sidebar-dot"></div>
+            <span class="sidebar-label">데이터</span>
+        </a>
+        <a href="#model-overview" class="sidebar-item">
+            <div class="sidebar-dot"></div>
+            <span class="sidebar-label">모델</span>
+        </a>
+        <a href="#abstract" class="sidebar-item">
+            <div class="sidebar-dot"></div>
+            <span class="sidebar-label">Abstract</span>
+        </a>
+        <a href="#citation" class="sidebar-item">
+            <div class="sidebar-dot"></div>
+            <span class="sidebar-label">Citation</span>
+        </a>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="tldr" class="hero-section">
+        <div class="hero-container">
+            <h1 class="hero-title">
+                <span class="gradient-text">서울 월드 모델</span>:<br>
+                <span class="hero-subtitle">실제 도시 기반의 월드 시뮬레이션 모델</span>
+            </h1>
+            <p style="font-size: 1rem; color: var(--color-text-muted); margin-top: -0.5rem; margin-bottom: 1rem; text-align: center;">
+                Grounding World Simulation Models in a Real-World Metropolis
+            </p>
+
+            <!-- Authors -->
+            <div class="hero-authors">
+                <span><a href="https://j0seo.github.io/" target="_blank" rel="noopener noreferrer">서준영</a><sup>*1</sup></span>
+                <span><a href="https://eenrue.github.io/" target="_blank" rel="noopener noreferrer">최현욱</a><sup>*1</sup></span>
+                <span><a href="https://mkxdxdxd.github.io/" target="_blank" rel="noopener noreferrer">권민경</a><sup>1</sup></span>
+                <span><a href="https://wlsguur.github.io/" target="_blank" rel="noopener noreferrer">최진혁</a><sup>1</sup></span>
+                <span><a href="https://jinsy515.github.io/my-page/" target="_blank" rel="noopener noreferrer">진시윤</a><sup>1</sup></span>
+                <span><a href="https://sites.google.com/site/gylee1103" target="_blank" rel="noopener noreferrer">이가영</a><sup>2</sup></span>
+                <span><a href="https://github.com/taki0112" target="_blank" rel="noopener noreferrer">김준호</a><sup>2</sup></span>
+                <span>이정빈<sup>1</sup></span>
+                <span><a href="https://geonm.github.io/" target="_blank" rel="noopener noreferrer">구건모</a><sup>2</sup></span>
+                <span><a href="https://sites.google.com/site/dyhan0920/" target="_blank" rel="noopener noreferrer">한동윤</a><sup>2,1</sup></span>
+                <span><a href="https://sangdooyun.github.io/" target="_blank" rel="noopener noreferrer">윤상두</a><sup>2,3</sup></span>
+                <span><a href="https://cvlab.kaist.ac.kr" target="_blank" rel="noopener noreferrer">김승룡</a><sup>&dagger;1</sup></span>
+                <span><a href="https://wityworks.com/" target="_blank" rel="noopener noreferrer">김진화</a><sup>&dagger;2,3</sup></span>
+            </div>
+
+            <div class="hero-affiliations">
+                <span><sup>1</sup>KAIST AI</span>
+                <span><sup>2</sup>NAVER AI Lab</span>
+                <span><sup>3</sup>SNU AIIS</span>
+            </div>
+
+            <div class="hero-notes">
+                <span>*: Equal contribution</span>
+                <span>&dagger;: Co-corresponding authors</span>
+            </div>
+
+            <!-- Link Buttons -->
+            <div class="hero-buttons">
+                <a href="SWM_paper.pdf" class="btn" target="_blank" rel="noopener">
+                    <i class="fa-solid fa-file-pdf"></i> 논문
+                </a>
+                <a href="https://arxiv.org/abs/2603.15583" class="btn btn-outline" target="_blank" rel="noopener noreferrer">
+                    <i class="fa-solid fa-book"></i> arXiv
+                </a>
+                <a href="video_kor.html" class="btn btn-outline" target="_blank" rel="noopener">
+                    <i class="fa-solid fa-video"></i> 데모 영상
+                </a>
+                <a href="https://github.com/naver-ai/seoul-world-model" class="btn btn-outline" target="_blank" rel="noopener noreferrer">
+                    <i class="fa-brands fa-github"></i> 코드
+                </a>
+                <a href="index.html" class="btn btn-outline">
+                    <i class="fa-solid fa-language"></i> English
+                </a>
+            </div>
+        </div>
+
+        <!-- Hero Teaser Video -->
+        <div class="teaser-container">
+            <div class="video-container" style="max-width: 72rem; margin: 0 auto 2rem auto;">
+                <video class="hero-video" autoplay loop muted playsinline>
+                    <source src="video/page-teaser-1.mp4" type="video/mp4">
+                </video>
+                <span class="video-caption">SWM이 생성한 AI 영상</span>
+            </div>
+        </div>
+
+        <!-- TL;DR Box -->
+        <div class="teaser-container">
+            <div class="tldr-box">
+                <div class="tldr-content">
+                    <span class="tldr-label">TL;DR</span>
+                    <p class="tldr-text" style="width: 100%;">
+                        월드 모델이 상상 속 공간이 아닌, 우리의 실제 도시를 모델링할 수 있다면 어떨까요?<br>
+                        <span class="tldr-highlight">Seoul World Model (SWM)</span>은
+                        <span class="tldr-highlight">실제 도시를 자유롭게 탐색할 수 있는 최초의 비디오 월드 모델</span>입니다.<br>
+                        서울 전역 수백만 장의 거리뷰 이미지를 바탕으로, 실제 도시에 기반한 영상을 수 킬로미터에 걸쳐 그려냅니다.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo: Text Control -->
+    <section id="demo-text" class="section">
+        <div class="container">
+            <h2 class="section-title">텍스트 기반 시나리오 제어</h2>
+            <p>
+                SWM은 텍스트 프롬프트를 통해 서울의 실제 거리를 자유롭게 돌아다니며,
+                그 위에 원하는 시나리오를 입힐 수 있습니다.
+                거리를 덮치는 거대한 파도, 빌딩 사이에 나타난 고질라 등
+                어떤 상황이든 상상하는 대로 만들어 보세요.
+            </p>
+            <div class="video-container">
+                <video loop muted playsinline preload="none" class="lazy-video" data-src="video/page-teaser-4.mp4">
+                </video>
+                <span class="video-caption">SWM이 생성한 AI 영상</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo: Multi-Kilometer Trajectory -->
+    <section id="demo-trajectory" class="section">
+        <div class="container">
+            <h2 class="section-title">수 킬로미터에 걸친 도시 탐험</h2>
+            <p>
+                실제 도시에 기반하여, SWM은 오차 누적 없이 <strong>수 킬로미터</strong>에 이르는 경로의
+                영상을 안정적으로 생성합니다.
+            </p>
+            <div class="video-container">
+                <video loop muted playsinline preload="none" class="lazy-video" data-src="video/page-teaser-2.mp4">
+                </video>
+                <span class="speed-label">20x speed</span>
+                <span class="video-caption">SWM이 생성한 AI 영상</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo: Free Navigation -->
+    <section id="demo-navigation" class="section">
+        <div class="container">
+            <h2 class="section-title">게임처럼 자유로운 탐색</h2>
+            <p>
+                인도를 걸어가거나, 골목을 돌아보거나, 고속도로를 달리거나.
+                SWM은 단순한 전진 주행을 넘어 <strong>자유로운 카메라 경로</strong>를 지원하여,
+                도시를 마음대로 탐색할 수 있게 합니다.
+            </p>
+            <div class="video-container">
+                <video loop muted playsinline preload="none" class="lazy-video" data-src="video/page-teaser-3.mp4">
+                </video>
+                <span class="video-caption">SWM이 생성한 AI 영상</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo: 월드 모델 RAG -->
+    <section id="demo-rag" class="section">
+        <div class="container">
+            <h2 class="section-title">거리뷰 데이터베이스 기반 월드 모델 RAG</h2>
+            <p>
+                SWM은 Retrieval-Augmented Generation을 수행합니다. 지리 좌표, 카메라 동작, 텍스트 프롬프트가 주어지면
+                주변 거리뷰 이미지를 검색하고, 기하학적 및 외관 참조 정보를 활용하여 영상을 생성합니다.
+                이를 통해 각 생성 단위가 해당 위치의 실제 구조와 외관에 기반하게 됩니다.
+            </p>
+            <div class="video-container">
+                <video loop muted playsinline preload="none" class="lazy-video" data-src="video/page-teaser-5-ver2.mp4">
+                </video>
+                <span class="video-caption">SWM이 생성한 AI 영상</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Data Overview -->
+    <section id="data-overview" class="section alt-bg">
+        <div class="container">
+            <h2 class="section-title">데이터 개요</h2>
+            <p>
+                SWM은 두 가지 소스의 거리뷰 참조-영상 쌍으로 학습됩니다.
+                서울 전역에서 수집한 <strong>120만 장의 실제 파노라마 이미지</strong>와,
+                Unreal Engine 기반 CARLA 시뮬레이터로 렌더링한 <strong>1만 개의 합성 영상</strong>
+                (431,500m&sup2; 규모)입니다.
+            </p>
+            <div class="figure-container">
+                <img src="assets/data.png" alt="데이터 개요: 실제 거리뷰 및 합성 데이터셋" style="max-width: 90%;">
+            </div>
+
+            <!-- Cross-Temporal Pairing + View Interpolation -->
+            <h3 class="subsection-title">Cross-Temporal Pairing &amp; Street-View Interpolation</h3>
+            <p>
+                <strong>Cross-temporal pairing</strong>은 참조 거리뷰 이미지가 타겟과 반드시 다른 시점에
+                촬영된 것이어야 한다는 조건입니다. 이를 통해 모델이 차량 같은 일시적 객체를 무시하고,
+                지속적인 공간 구조에 집중하도록 유도합니다. 아래 왼쪽 그림처럼,
+                학습된 모델은 참조 이미지 내 동적 콘텐츠가 아닌 공간 구조에 주의를 기울입니다.
+                <strong>View interpolation</strong>(오른쪽)은 5~20m 간격의 희소한 거리뷰 키프레임으로부터
+                3D VAE의 temporal stride에 맞춘 Intermittent Freeze-Frame 전략으로
+                매끄러운 학습용 영상을 합성합니다.
+            </p>
+            <div class="two-col" style="gap: 1.5rem; align-items: center;">
+                <div class="two-col-item">
+                    <div class="figure-container">
+                        <img src="assets/vis_attn.png" alt="Cross-temporal pairing attention 시각화">
+                        <span class="figure-caption">Cross-Temporal Pairing 하의 Attention 시각화</span>
+                    </div>
+                </div>
+                <div class="two-col-item">
+                    <div class="figure-container">
+                        <img src="assets/interp_only.png" alt="View interpolation 파이프라인">
+                        <span class="figure-caption">거리뷰 보간 모델</span>
+                    </div>
+                </div>
+            </div>
+            <p>
+                Cross-temporal pairing 없이는 참조 이미지 속 동적 객체(예: 차량)가 생성 영상에 그대로 전이됩니다.
+                시간적 분리가 모델로 하여금 지속적인 공간 구조에 집중하도록 만듭니다.
+            </p>
+            <div class="video-container" style="max-width: 85%; margin: 0 auto;">
+                <video loop muted playsinline preload="none" class="lazy-video" data-src="video/page-pairing.mp4">
+                </video>
+            </div>
+
+            <!-- Synthetic Data -->
+            <h3 class="subsection-title">Unreal Engine 기반 합성 데이터</h3>
+            <p>
+                주행 위주인 실제 데이터의 경로 다양성을 보완하기 위해,
+                CARLA 시뮬레이터에서 세 가지 유형의 합성 데이터를 렌더링합니다.
+                <strong>보행자</strong>(인도, 횡단보도), <strong>차량</strong>(고속도로, 시내 도로),
+                <strong>자유 카메라</strong>(충돌 회피 기반 임의 경로).
+                이러한 다양성 덕분에 SWM은 추론 시 자유로운 카메라 이동에도 대응할 수 있습니다.
+            </p>
+            <div style="display: flex; gap: 0.5rem; margin-bottom: 0.25rem;">
+                <div style="flex: 1;">
+                    <video loop muted playsinline preload="none" class="lazy-video" data-src="video/synthetic_1.mp4" style="width: 100%; border-radius: 0.5rem;">
+                    </video>
+                </div>
+                <div style="flex: 1;">
+                    <video loop muted playsinline preload="none" class="lazy-video" data-src="video/synthetic_2.mp4" style="width: 100%; border-radius: 0.5rem;">
+                    </video>
+                </div>
+                <div style="flex: 1;">
+                    <video loop muted playsinline preload="none" class="lazy-video" data-src="video/synthetic_3.mp4" style="width: 100%; border-radius: 0.5rem;">
+                    </video>
+                </div>
+            </div>
+            <span class="video-caption" style="margin-bottom: 1rem;">Examples of synthetic training data</span>
+            <p>
+                아래 비교에서 볼 수 있듯이, 다양한 카메라 경로의 합성 데이터가
+                SWM이 전진 주행을 넘어 다양한 경로로 일반화할 수 있도록 합니다.
+            </p>
+            <div class="video-container" style="max-width: 85%; margin: 0 auto;">
+                <video loop muted playsinline preload="none" class="lazy-video" data-src="video/page-synthetic.mp4">
+                </video>
+            </div>
+        </div>
+    </section>
+
+    <!-- Model Overview -->
+    <section id="model-overview" class="section">
+        <div class="container">
+            <h2 class="section-title">모델 개요</h2>
+            <p>
+                SWM은 텍스트 프롬프트, 카메라 경로, 그리고
+                지리 색인된 거리뷰 데이터베이스에서 검색한 거리뷰 이미지를 조건으로
+                영상 청크를 autoregressive하게 생성합니다.
+            </p>
+            <div class="figure-container">
+                <img src="assets/model.png" alt="SWM 모델 아키텍처 개요" style="max-width: 85%; margin: 0 auto;">
+            </div>
+
+            <!-- Retrieval and Referencing -->
+            <h3 class="subsection-title">Retrieval &amp; Referencing</h3>
+            <p>
+                각 생성 청크마다 nearest-neighbor 검색과 depth 기반 reprojection 필터링을 통해
+                주변 거리뷰 이미지를 검색합니다. 이 참조 이미지는 두 가지 상호 보완적 경로로 생성을 조건화합니다.
+                <strong>Geometric referencing</strong>은 가장 가까운 참조를 depth 기반 splatting으로
+                타겟 시점에 워핑하여 공간 레이아웃 단서를 제공하고,
+                <strong>Semantic referencing</strong>은 원본 참조 이미지를 transformer의
+                latent sequence에 주입하여 모든 참조의 외관 디테일에 attend할 수 있게 합니다.
+            </p>
+
+            <!-- Virtual Lookahead Sink -->
+            <h3 class="subsection-title">Virtual Lookahead Sink</h3>
+            <div class="text-figure-row">
+                <div class="text-figure-text">
+                    <p>
+                        Autoregressive 생성은 장거리에 걸쳐 오차가 누적됩니다. 기존 방법(a)은
+                        첫 프레임에 고정된 static attention sink를 사용하지만,
+                        카메라가 멀어질수록 그 안내 효과가 약해집니다.
+                        <strong>Virtual Lookahead (VL) Sink</strong>(b)는 가장 가까운 거리뷰 이미지를
+                        가상의 미래 목적지로 동적 검색하여, 현재 생성 청크 앞에
+                        깨끗하고 오차 없는 앵커를 배치합니다.
+                        이를 통해 생성이 지속적으로 재기반되어, 수백 미터에 걸친 경로에서도
+                        영상 품질이 안정적으로 유지됩니다.
+                        아래 비교는 VL Sink가 장거리 생성에서 품질 저하를 효과적으로 방지하는 것을 보여줍니다.
+                    </p>
+                </div>
+                <div class="text-figure-img">
+                    <div class="figure-container">
+                        <img src="assets/sink.png" alt="Virtual Lookahead Sink 메커니즘">
+                    </div>
+                </div>
+            </div>
+            <div class="video-container" style="max-width: 85%; margin: 0 auto;">
+                <video loop muted playsinline preload="none" class="lazy-video" data-src="video/page-vlsink.mp4">
+                </video>
+            </div>
+        </div>
+    </section>
+
+    <!-- Abstract -->
+    <section id="abstract" class="section alt-bg">
+        <div class="container">
+            <h2 class="section-title">Abstract</h2>
+            <div class="abstract-text">
+                <p>
+                    What if a world simulation model could render not an imagined environment but a city that actually
+                    exists? Prior generative world models synthesize visually plausible yet artificial environments by
+                    imagining all content. We present Seoul World Model (SWM), a city-scale world model grounded in the
+                    real city of Seoul. SWM anchors autoregressive video generation through retrieval-augmented
+                    conditioning on nearby street-view images. However, this design introduces several challenges,
+                    including temporal misalignment between retrieved references and the dynamic target scene, limited
+                    trajectory diversity and data sparsity from vehicle-mounted captures at sparse intervals. We address
+                    these challenges through cross-temporal pairing, a large-scale synthetic dataset enabling diverse
+                    camera trajectories, and a view interpolation pipeline that synthesizes coherent training videos from
+                    sparse street-view images. We further introduce a Virtual Lookahead Sink to stabilize long-horizon
+                    generation by continuously re-grounding each chunk to a retrieved image at a future location. We
+                    evaluate SWM against recent video world models across three cities: Seoul, Busan, and Ann Arbor. SWM
+                    outperforms existing methods in generating spatially faithful, temporally consistent, long-horizon
+                    videos grounded in actual urban environments over trajectories reaching hundreds of meters, while
+                    supporting diverse camera movements and text-prompted scenario variations.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Citation Section -->
+    <section id="citation" class="citation-section">
+        <div class="container">
+            <h2 class="section-title" style="font-size: 1.5rem; border: none; margin-bottom: 1rem;">Citation</h2>
+            <div class="citation-block group">
+                <button onclick="copyBibtex()" class="citation-copy-btn">
+                    <i class="fa-regular fa-copy"></i> 복사
+                </button>
+                <div id="bibtex-text" style="display: none;">[TBD]</div>
+                <pre class="citation-code"><code id="bibtex-code">[TBD]</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- Industry-Academic Note -->
+    <section style="padding: 1.5rem 0 0 0;">
+        <div class="container">
+            <p style="font-size: 0.85rem; color: var(--color-text-muted); line-height: 1.5; margin: 0;">
+                본 연구는 NAVER Map 데이터를 활용한 NAVER-KAIST 산학 협력 프로젝트입니다.
+            </p>
+        </div>
+    </section>
+
+    <!-- Acknowledgements -->
+    <section style="padding: 2rem 0;">
+        <div class="container">
+            <h2 style="font-size: 1.1rem; font-weight: 600; color: var(--color-text-muted); margin-bottom: 0.75rem;">감사의 글</h2>
+            <p style="font-size: 0.95rem; color: var(--color-text-muted); line-height: 1.6; margin: 0;">
+                본 연구를 위해 여러 도움을 주신 NAVER와 NAVER Cloud의 모든 분들께 진심으로 감사드립니다.
+                데이터 전처리에 기여해 주신 임진배, 임문빈, 이바도 님께 감사드리며,
+                데이터 처리와 지도 데이터 및 메타데이터 활용에 도움을 주신 나종채, 조현준, 황호철, 채명석, 김광근 님,
+                그리고 기획과 관련해 세심한 피드백을 주신 김종학, 신지은, 신혜은 님께 감사의 말씀을 전합니다.
+                모든 분들의 적극적인 협조와 지원에 깊이 감사드립니다.
+            </p>
+            <div style="display: flex; justify-content: flex-end; margin-top: 1rem;">
+                <a href="https://hits.sh/seoul-world-model.github.io/"><img alt="Hits" src="https://hits.sh/seoul-world-model.github.io.svg?view=today-total&style=for-the-badge&color=97ca00"/></a>
+            </div>
+        </div>
+    </section>
+
+
+    <script>
+        // Fade-in Animation
+        function initFadeInAnimations() {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const sections = document.querySelectorAll('.section, .hero-section, .citation-section, .footer');
+            sections.forEach(section => {
+                section.classList.add('fade-in-section');
+                observer.observe(section);
+            });
+        }
+
+        // Scroll Spy for Sidebar
+        function initScrollSpy() {
+            const sections = document.querySelectorAll('section[id]');
+            const sidebarLinks = document.querySelectorAll('.sidebar-item');
+            const sidebar = document.querySelector('.sidebar');
+
+            const observerOptions = {
+                root: null,
+                rootMargin: '-50% 0px -50% 0px',
+                threshold: 0
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.getAttribute('id');
+
+                        sidebarLinks.forEach(link => {
+                            link.classList.remove('active');
+                        });
+
+                        const activeLink = document.querySelector(`.sidebar-item[href="#${id}"]`);
+                        if (activeLink) {
+                            activeLink.classList.add('active');
+
+                            const linkRect = activeLink.getBoundingClientRect();
+                            const sidebarRect = sidebar.getBoundingClientRect();
+                            const relativeTop = linkRect.top - sidebarRect.top;
+                            sidebar.style.setProperty('--active-position', `${relativeTop - 32}px`);
+                        }
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        }
+
+        function copyBibtex() {
+            const text = document.getElementById('bibtex-text').innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.querySelector('.citation-copy-btn');
+                const original = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> 복사됨!';
+                setTimeout(() => {
+                    btn.innerHTML = original;
+                }, 2000);
+            });
+        }
+
+        // Lazy Loading Videos
+        function initLazyVideos() {
+            const videos = document.querySelectorAll('video.lazy-video');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const video = entry.target;
+                        const src = video.dataset.src;
+                        if (src) {
+                            video.addEventListener('playing', function onPlaying() {
+                                video.classList.add('loaded');
+                                video.removeEventListener('playing', onPlaying);
+                            });
+                            const source = document.createElement('source');
+                            source.src = src;
+                            source.type = 'video/mp4';
+                            video.appendChild(source);
+                            video.load();
+                            video.play();
+                            delete video.dataset.src;
+                        }
+                        observer.unobserve(video);
+                    }
+                });
+            }, {
+                rootMargin: '200px 0px'
+            });
+
+            videos.forEach(video => observer.observe(video));
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initScrollSpy();
+            initFadeInAnimations();
+            initLazyVideos();
+
+            const heroVideo = document.querySelector('video.hero-video');
+            if (heroVideo) {
+                heroVideo.addEventListener('playing', function onPlaying() {
+                    heroVideo.classList.add('loaded');
+                    heroVideo.removeEventListener('playing', onPlaying);
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
