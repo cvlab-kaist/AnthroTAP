@@ -29,9 +29,13 @@
         href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.1/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-
+    
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
 </head>
 
 <body>
@@ -41,33 +45,21 @@
             <div class="sidebar-dot"></div>
             <span class="sidebar-label">TL;DR</span>
         </a>
-        <a href="#demo-trajectory" class="sidebar-item">
-            <div class="sidebar-dot"></div>
-            <span class="sidebar-label">Multi-km Trajectory</span>
-        </a>
-        <a href="#demo-navigation" class="sidebar-item">
-            <div class="sidebar-dot"></div>
-            <span class="sidebar-label">Free Navigation</span>
-        </a>
-        <a href="#demo-text" class="sidebar-item">
-            <div class="sidebar-dot"></div>
-            <span class="sidebar-label">Text Control</span>
-        </a>
-        <a href="#demo-rag" class="sidebar-item">
-            <div class="sidebar-dot"></div>
-            <span class="sidebar-label">RAG Visualization</span>
-        </a>
-        <a href="#data-overview" class="sidebar-item">
-            <div class="sidebar-dot"></div>
-            <span class="sidebar-label">Data</span>
-        </a>
-        <a href="#model-overview" class="sidebar-item">
-            <div class="sidebar-dot"></div>
-            <span class="sidebar-label">Model</span>
-        </a>
         <a href="#abstract" class="sidebar-item">
             <div class="sidebar-dot"></div>
             <span class="sidebar-label">Abstract</span>
+        </a>
+        <a href="#pipeline" class="sidebar-item">
+            <div class="sidebar-dot"></div>
+            <span class="sidebar-label">Pipeline</span>
+        </a>
+        <a href="#qual-results" class="sidebar-item">
+            <div class="sidebar-dot"></div>
+            <span class="sidebar-label">Results</span>
+        </a>
+        <a href="#ablation-study" class="sidebar-item">
+            <div class="sidebar-dot"></div>
+            <span class="sidebar-label">Ablation Study</span>
         </a>
         <a href="#citation" class="sidebar-item">
             <div class="sidebar-dot"></div>
@@ -116,10 +108,13 @@
                     <i class="ai ai-arxiv"></i> arXiv
                 </a>
                 <a href="https://github.com/cvlab-kaist/AnthroTAP" class="btn btn-outline" target="_blank" rel="noopener">
-                    <i class="fa-brands fa-github"></i> Code
+                    <i class="fa-brands fa-github"></i> Code & Weights
                 </a>
                 <a href="" class="btn btn-outline" target="_blank" rel="noopener noreferrer">
                     <i class="fa-solid fa-database"></i> Data (comming soon)
+                </a>
+                <a href="#citation" class="btn btn-outline">
+                    <i class="fa-solid fa-quote-right"></i> BibTeX
                 </a>
             </div>
         </div>
@@ -254,100 +249,152 @@
         </div>
     </section>
 
-    <!-- Demo: Multi-Kilometer Trajectory -->
-    <section id="demo-trajectory" class="section">
+    <!-- Abstract -->
+    <section id="abstract" class="section alt-bg">
         <div class="container">
-            <h2 class="section-title">Roaming the City for Kilometers</h2>
-            <p>
-                Grounded in a real city, SWM generates videos over <strong>multi-kilometer</strong> trajectories
-                without accumulating errors, maintaining robust performance across long-horizon generation.
-            </p>
-            <div class="video-container">
-                <video loop muted playsinline preload="none" class="lazy-video" data-src="video/page-teaser-2.mp4">
-                </video>
-                <span class="speed-label">20x speed</span>
-                <span class="video-caption">AI-Generated Video by SWM</span>
+            <h2 class="section-title">Abstract</h2>
+            <div class="abstract-text">
+                <p>
+                    Human motion, with its inherent complexities, such as non-rigid deformations,
+                    articulated movements, clothing distortions, and frequent occlusions caused by
+                    limbs or other individuals, provides a rich and challenging source of supervision that
+                    is crucial for training robust and generalizable point trackers. Despite the suitability
+                    of human motion, acquiring extensive training data for point tracking remains
+                    difficult due to laborious manual annotation. 
+                </p>
+                <p>
+                    Our proposed pipeline, <b>AnthroTAP</b>,
+                    addresses this by proposing an automated pipeline to generate pseudo-labeled
+                    training data, leveraging the Skinned Multi-Person Linear (SMPL) model. We
+                    first fit the SMPL model to detected humans in video frames, project the resulting
+                    3D mesh vertices onto 2D image planes to generate pseudo-trajectories, handle
+                    occlusions using ray-casting, and filter out unreliable tracks based on optical flow
+                    consistency. 
+                </p>
+                <p>
+                    A point tracking model trained on AnthroTAP annotated dataset
+                    achieves state-of-the-art performance on the TAP-Vid benchmark, surpassing other
+                    models trained on real videos while using 10,000x less data and only 1 day in 4
+                    GPUs, compared to 256 GPUs used in recent state-of-the-art.
+                </p>
             </div>
         </div>
     </section>
 
-    <!-- Demo: Free Navigation -->
-    <section id="demo-navigation" class="section">
+    <!-- Pipeline -->
+    <section id="pipeline" class="section">
         <div class="container">
-            <h2 class="section-title">Navigate Freely, Like in a Video Game</h2>
+            <h2 class="section-title">Pipeline</h2>
             <p>
-                From strolling down a sidewalk to glancing around a corner or cruising along a highway,
-                SWM supports <strong>free-form navigation</strong> beyond simple forward driving,
-                letting users explore the city through arbitrary camera trajectories.
-            </p>
-            <div class="video-container">
-                <video loop muted playsinline preload="none" class="lazy-video" data-src="video/page-teaser-3.mp4">
-                </video>
-                <span class="video-caption">AI-Generated Video by SWM</span>
-            </div>
-        </div>
-    </section>
-
-    <!-- Demo: Text Control -->
-    <section id="demo-text" class="section">
-        <div class="container">
-            <h2 class="section-title">Text-Prompted Scenario Control</h2>
-            <p>
-                SWM also allows users to reshape familiar city scenes
-                through <strong>text prompts</strong>: summon a massive wave onto the streets,
-                drop Godzilla between skyscrapers, or imagine any scenario you like.
-            </p>
-            <div class="video-container">
-                <video loop muted playsinline preload="none" class="lazy-video" data-src="video/page-teaser-4.mp4">
-                </video>
-                <span class="video-caption">AI-Generated Video by SWM</span>
-            </div>
-        </div>
-    </section>
-
-    <!-- Demo: World Model RAG -->
-    <section id="demo-rag" class="section">
-        <div class="container">
-            <h2 class="section-title">World Model RAG with Street-View Database</h2>
-            <p>
-                SWM performs retrieval-augmented generation: given geographic coordinates, camera actions, and text
-                prompts, it retrieves nearby street-view images and conditions generation on complementary geometric
-                and appearance references. This anchors each generated chunk to the real layout and appearance of the
-                location.
-            </p>
-            <div class="video-container">
-                <video loop muted playsinline preload="none" class="lazy-video" data-src="video/page-teaser-5-ver2.mp4">
-                </video>
-                <span class="video-caption">AI-Generated Video by SWM</span>
-            </div>
-        </div>
-    </section>
-
-    <!-- Data Overview -->
-    <section id="data-overview" class="section alt-bg">
-        <div class="container">
-            <h2 class="section-title">Data Overview</h2>
-            <p>
-                SWM is trained on aligned pairs of street-view references and target video sequences from two sources:
-                <strong>1.2M real panoramic images</strong> captured across Seoul, and <strong>10K synthetic videos</strong>
-                from a Unreal Engine-based CARLA urban simulator spanning 431,500m&sup2; of city area.
+                <strong>AnthroTAP</strong> extract human meshes using an off-the-shelf human mesh recovery model, and track points by projecting the mesh vertices.
+                Point visibility is determined by using ray-casting.
+                In parallel, we extract optical flow and retain only reliable flow using forward-backward consistency.
+                Finally, to enhance pseudo-label reliability, trajectories are filtered by checking the consistency between the optical flow and the trajectories generated from the human mesh.
             </p>
             <div class="figure-container">
-                <img src="assets/data.png" alt="Data overview: real street-view and synthetic datasets" style="max-width: 90%;">
+                <img src="assets/overall-pipeline.png" alt="AnthroTAP overall pipeline" style="max-width: 85%; margin: 0 auto;">
             </div>
 
-            <!-- Cross-Temporal Pairing + View Interpolation -->
-            <h3 class="subsection-title">Cross-Temporal Pairing &amp; Street-View Interpolation</h3>
+            <!-- Optical-flow based trajectory filtering -->
+            <!-- <h3 class="subsection-title">Optical-flow based trajectory filtering</h3>
             <p>
-                <strong>Cross-temporal pairing</strong> requires that reference street-view images be captured at a
-                different time from the target, forcing the model to rely on persistent spatial structure
-                and ignore transient objects like vehicles. As shown below (left), the trained model attends to
-                scene geometry rather than dynamic content in the references.
-                <strong>View interpolation</strong> (right) synthesizes smooth training videos from sparse street-view
-                keyframes (5&ndash;20m apart) using an Intermittent Freeze-Frame strategy matched to the 3D VAE's
-                temporal stride.
+                <strong>blabla</strong>
+            </p> -->
+        </div>
+    </section>
+
+    <!-- Qualitative Results -->
+    <section id="qual-results" class="section">
+        <div class="container">
+            <h2 class="section-title">Qualitative Results</h2>
+            <p>
+                Compared to previous state-of-the-art methods, <strong>Anthro-LocoTrack</strong>, LocoTrack-base model
+                trained with the dataset generated by our pipeline, consistently demonstrates strong performance
+                on highly deformable objects and severe occlusions.
             </p>
-            <div class="two-col" style="gap: 1.5rem; align-items: center;">
+            <div class="qual-carousel-wrapper">
+                <table class="qual-header-table">
+                    <tr>
+                        <td>CoTracker3</td>
+                        <td>BootsTAPIR</td>
+                        <td>Anthro-LocoTrack (Ours)</td>
+                    </tr>
+                </table>
+                <div id="carousel-qual" class="result-carousel">
+                    <!-- Injected by JS -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Quantitative Results -->
+    <section id="quan-results" class="section">
+        <div class="container">
+            <h2 class="section-title">Quantitative Results</h2>
+            <p>
+                LocoTrack-B, trained with our approach, shows a significant performance improvement across all metrics
+                and datasets on <strong>TAP-Vid benchmark</strong> and <strong>RoboTAP</strong>, even with 11x smaller training dataset
+                than CoTracker3 in terms of the number of videos, and 1,000x smaller dataset used in BootsTAPIR
+                in terms of the number of training frames.
+                
+                Furthermore, in terms of position accuracy (\(< δ_{avg}^x \)), our model achieves the best performance on every dataset.
+            </p>
+            <div class="quan-table-wrapper">
+                <table class="results-table">
+                    <colgroup>
+                        <col style="width:13%">
+                        <col style="width:9%">
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th rowspan="2" style="vertical-align:middle;">Method</th>
+                            <th rowspan="2" style="vertical-align:middle;">Training Dataset</th>
+                            <th colspan="3"><strong>DAVIS First</strong></th>
+                            <th colspan="3"><strong>DAVIS Strided</strong></th>
+                            <th colspan="3"><strong>Kinetics First</strong></th>
+                            <th colspan="3"><strong>RoboTAP First</strong></th>
+                        </tr>
+                        <tr>
+                            <th>AJ&uarr;</th><th>&lt;&delta;<sup>x</sup><sub>avg</sub>&uarr;</th><th>OA&uarr;</th>
+                            <th>AJ&uarr;</th><th>&lt;&delta;<sup>x</sup><sub>avg</sub>&uarr;</th><th>OA&uarr;</th>
+                            <th>AJ&uarr;</th><th>&lt;&delta;<sup>x</sup><sub>avg</sub>&uarr;</th><th>OA&uarr;</th>
+                            <th>AJ&uarr;</th><th>&lt;&delta;<sup>x</sup><sub>avg</sub>&uarr;</th><th>OA&uarr;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="section-header-row"><td colspan="14">Models evaluated at 256&times;256 resolution</td></tr>
+                        <tr><td>OmniMotion</td><td>-</td><td>-</td><td>-</td><td>-</td><td>51.7</td><td>67.5</td><td>85.3</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+                        <tr><td>Dino-Tracker</td><td>-</td><td>-</td><td>-</td><td>-</td><td>62.3</td><td>78.2</td><td>87.5</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+                        <tr class="separator-row"><td colspan="14"></td></tr>
+                        <tr><td>TAPNet</td><td>Kub</td><td>33.0</td><td>48.6</td><td>78.8</td><td>38.4</td><td>53.1</td><td>82.3</td><td>38.5</td><td>54.4</td><td>80.6</td><td>-</td><td>-</td><td>-</td></tr>
+                        <tr><td>TAPIR</td><td>Kub</td><td>58.5</td><td>70.0</td><td>86.5</td><td>61.3</td><td>73.6</td><td>88.8</td><td>49.6</td><td>64.2</td><td>85.0</td><td>59.6</td><td>73.4</td><td>87.0</td></tr>
+                        <tr><td>Online TAPIR</td><td>Kub</td><td>56.2</td><td>70.0</td><td>86.5</td><td>-</td><td>-</td><td>-</td><td>51.5</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+                        <tr><td>TAPTR</td><td>Kub</td><td>63.0</td><td>76.1</td><td><u>91.1</u></td><td>66.3</td><td>79.2</td><td><u>91.0</u></td><td>49.0</td><td>64.4</td><td>85.2</td><td>60.1</td><td>75.3</td><td>86.9</td></tr>
+                        <tr><td>TAPTRv2</td><td>Kub</td><td><u>63.5</u></td><td>75.9</td><td><strong>91.4</strong></td><td>66.4</td><td>78.8</td><td><strong>91.3</strong></td><td>49.7</td><td>64.2</td><td>85.7</td><td>-</td><td>-</td><td>-</td></tr>
+                        <tr><td>TAPTRv3</td><td>Kub</td><td>63.2</td><td><u>76.7</u></td><td>91.0</td><td>-</td><td>-</td><td>-</td><td><u>54.5</u></td><td><u>67.5</u></td><td><strong>88.2</strong></td><td>-</td><td>-</td><td>-</td></tr>
+                        <tr><td>BootsTAPIR</td><td>Kub+15M</td><td>61.4</td><td>74.0</td><td>88.4</td><td>66.2</td><td>78.5</td><td>90.7</td><td><strong>54.6</strong></td><td><strong>68.4</strong></td><td><u>86.5</u></td><td><strong>64.9</strong></td><td><strong>80.1</strong></td><td>86.3</td></tr>
+                        <tr class="separator-row"><td colspan="14"></td></tr>
+                        <tr><td>LocoTrack</td><td>Kub</td><td>63.0</td><td>75.3</td><td>87.2</td><td><u>67.8</u></td><td><u>79.6</u></td><td>89.9</td><td>52.9</td><td>66.8</td><td>85.3</td><td>62.3</td><td>76.2</td><td><u>87.1</u></td></tr>
+                        <tr class="highlight-row"><td><strong>Anthro-LocoTrack (Ours)</strong></td><td>Kub+1.4K</td><td><strong>64.8</strong></td><td><strong>77.3</strong></td><td>89.1</td><td><strong>69.0</strong></td><td><strong>81.0</strong></td><td>90.8</td><td>53.9</td><td><strong>68.4</strong></td><td>86.4</td><td><u>64.7</u></td><td><u>79.2</u></td><td><strong>88.4</strong></td></tr>
+                        <tr class="improvement-row"><td colspan="2" style="text-align:center;">Improvement over baseline</td><td>+1.8</td><td>+2.0</td><td>+1.9</td><td>+1.2</td><td>+1.4</td><td>+0.9</td><td>+1.0</td><td>+1.6</td><td>+1.1</td><td>+2.4</td><td>+3.0</td><td>+1.3</td></tr>
+
+                        <tr class="section-header-row"><td colspan="14">Models evaluated at 384&times;512 resolution</td></tr>
+                        <tr><td>PIPs</td><td>FT</td><td>42.2</td><td>64.8</td><td>77.7</td><td>52.4</td><td>70.0</td><td>83.6</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+                        <tr><td>CoTracker2</td><td>Kub</td><td>62.2</td><td>75.7</td><td>89.3</td><td>65.9</td><td>79.4</td><td><u>89.9</u></td><td>48.8</td><td>64.5</td><td>85.8</td><td>-</td><td>-</td><td>-</td></tr>
+                        <tr><td>Track-On</td><td>Kub</td><td><u>65.0</u></td><td><u>78.0</u></td><td><u>90.8</u></td><td>-</td><td>-</td><td>-</td><td>53.9</td><td>67.3</td><td><u>87.8</u></td><td>-</td><td>-</td><td>-</td></tr>
+                        <tr><td>CoTracker3 (online)</td><td>Kub64+15K</td><td>64.4</td><td>76.9</td><td><strong>91.2</strong></td><td>-</td><td>-</td><td>-</td><td>54.7</td><td>67.8</td><td>87.4</td><td>-</td><td>-</td><td>-</td></tr>
+                        <tr><td>CoTracker3 (offline)</td><td>Kub64+15K</td><td>63.8</td><td>76.3</td><td>90.2</td><td>-</td><td>-</td><td>-</td><td><strong>55.8</strong></td><td><u>68.5</u></td><td><strong>88.3</strong></td><td>-</td><td>-</td><td>-</td></tr>
+                        <tr class="separator-row"><td colspan="14"></td></tr>
+                        <tr><td>LocoTrack</td><td>Kub</td><td>64.8</td><td>77.4</td><td>86.2</td><td><u>69.4</u></td><td><u>81.3</u></td><td>88.6</td><td>52.3</td><td>66.4</td><td>82.1</td><td>-</td><td>-</td><td>-</td></tr>
+                        <tr class="highlight-row"><td><strong>Anthro-LocoTrack (Ours)</strong></td><td>Kub+1.4K</td><td><strong>65.9</strong></td><td><strong>78.9</strong></td><td>87.3</td><td><strong>71.1</strong></td><td><strong>82.9</strong></td><td><strong>90.3</strong></td><td><u>54.8</u></td><td><strong>68.6</strong></td><td>85.3</td><td>-</td><td>-</td><td>-</td></tr>
+                        <tr class="improvement-row"><td colspan="2" style="text-align:center;">Improvement over baseline</td><td>+1.1</td><td>+1.5</td><td>+1.1</td><td>+1.7</td><td>+1.6</td><td>+1.7</td><td>+2.5</td><td>+2.2</td><td>+3.2</td><td>-</td><td>-</td><td>-</td></tr>
+                    </tbody>
+                    <caption class="quan-table-caption">
+                        Quantitative results on <strong>TAP-Vid benchmark</strong> and <strong>RoboTAP</strong>.
+                    </caption>
+                </table>
+            </div>
+            <!-- <div class="two-col" style="gap: 1.5rem; align-items: center;">
                 <div class="two-col-item">
                     <div class="figure-container">
                         <img src="assets/vis_attn.png" alt="Cross-temporal pairing attention visualization">
@@ -368,10 +415,10 @@
             <div class="video-container" style="max-width: 85%; margin: 0 auto;">
                 <video loop muted playsinline preload="none" class="lazy-video" data-src="video/page-pairing.mp4">
                 </video>
-            </div>
+            </div> -->
 
             <!-- Synthetic Data -->
-            <h3 class="subsection-title">Unreal Engine-based Synthetic Data</h3>
+            <!-- <h3 class="subsection-title">Unreal Engine-based Synthetic Data</h3>
             <p>
                 To complement driving-only real trajectories, we render synthetic data from CARLA simulator with three
                 trajectory types: <strong>pedestrian</strong> (sidewalks, crossings),
@@ -401,82 +448,16 @@
             <div class="video-container" style="max-width: 85%; margin: 0 auto;">
                 <video loop muted playsinline preload="none" class="lazy-video" data-src="video/page-synthetic.mp4">
                 </video>
-            </div>
+            </div> -->
         </div>
     </section>
 
-    <!-- Model Overview -->
-    <section id="model-overview" class="section">
+    <!-- Ablation -->
+    <section id="ablation-study" class="section">
         <div class="container">
-            <h2 class="section-title">Model Overview</h2>
-            <p>
-                SWM autoregressively generates video chunks conditioned on a text prompt, camera trajectory,
-                and street-view images retrieved from a geo-indexed street-view database.
-            </p>
-            <div class="figure-container">
-                <img src="assets/model.png" alt="SWM model architecture overview" style="max-width: 85%; margin: 0 auto;">
-            </div>
-
-            <!-- Retrieval and Referencing -->
-            <h3 class="subsection-title">Retrieval &amp; Referencing</h3>
-            <p>
-                For each generation chunk, nearby street-view images are retrieved via nearest-neighbor search
-                and depth-based reprojection filtering. These references condition generation through two
-                complementary pathways: <strong>geometric referencing</strong> warps the nearest reference into the
-                target viewpoint via depth-based splatting to provide spatial layout cues, while
-                <strong>semantic referencing</strong> injects original reference images into the transformer's
-                latent sequence so the model can attend to appearance details across all references.
-            </p>
-
-            <!-- Virtual Lookahead Sink -->
-            <h3 class="subsection-title">Virtual Lookahead Sink</h3>
-            <div class="text-figure-row">
-                <div class="text-figure-text">
-                    <p>
-                        Autoregressive generation accumulates errors over long horizons. Prior methods (a) use a static
-                        attention sink anchored to the initial frame, whose guidance weakens as the camera moves farther away.
-                        Our <strong>Virtual Lookahead (VL) Sink</strong> (b) dynamically retrieves the nearest
-                        street-view image as a virtual future destination, providing a clean, error-free anchor ahead of the
-                        current chunk. This continuously re-grounds generation, stabilizing video quality
-                        over trajectories spanning hundreds of meters.
-                        The comparison below shows that VL Sink effectively prevents quality degradation in long-horizon generation.
-                    </p>
-                </div>
-                <div class="text-figure-img">
-                    <div class="figure-container">
-                        <img src="assets/sink.png" alt="Virtual Lookahead Sink mechanism">
-                    </div>
-                </div>
-            </div>
-            <div class="video-container" style="max-width: 85%; margin: 0 auto;">
-                <video loop muted playsinline preload="none" class="lazy-video" data-src="video/page-vlsink.mp4">
-                </video>
-            </div>
-        </div>
-    </section>
-
-    <!-- Abstract -->
-    <section id="abstract" class="section alt-bg">
-        <div class="container">
-            <h2 class="section-title">Abstract</h2>
-            <div class="abstract-text">
-                <p>
-                    What if a world simulation model could render not an imagined environment but a city that actually
-                    exists? Prior generative world models synthesize visually plausible yet artificial environments by
-                    imagining all content. We present Seoul World Model (SWM), a city-scale world model grounded in the
-                    real city of Seoul. SWM anchors autoregressive video generation through retrieval-augmented
-                    conditioning on nearby street-view images. However, this design introduces several challenges,
-                    including temporal misalignment between retrieved references and the dynamic target scene, limited
-                    trajectory diversity and data sparsity from vehicle-mounted captures at sparse intervals. We address
-                    these challenges through cross-temporal pairing, a large-scale synthetic dataset enabling diverse
-                    camera trajectories, and a view interpolation pipeline that synthesizes coherent training videos from
-                    sparse street-view images. We further introduce a Virtual Lookahead Sink to stabilize long-horizon
-                    generation by continuously re-grounding each chunk to a retrieved image at a future location. We
-                    evaluate SWM against recent video world models across three cities: Seoul, Busan, and Ann Arbor. SWM
-                    outperforms existing methods in generating spatially faithful, temporally consistent, long-horizon
-                    videos grounded in actual urban environments over trajectories reaching hundreds of meters, while
-                    supporting diverse camera movements and text-prompted scenario variations.
-                </p>
+            <h2 class="section-title">Ablation Study</h2>
+            <div id="carousel-abl" class="result-carousel">
+                <!-- Injected by JS -->
             </div>
         </div>
     </section>
@@ -553,11 +534,36 @@
             });
         }
 
+        // Sidebar click scroll with offset
+        function initSidebarScroll() {
+            const sidebar = document.querySelector('.sidebar');
+            document.querySelectorAll('.sidebar-item').forEach(link => {
+                link.addEventListener('click', function (e) {
+                    const isTopSidebar = window.matchMedia('(max-width: 1280px)').matches;
+                    if (!isTopSidebar) return;
+
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').slice(1);
+                    const target = document.getElementById(targetId);
+                    if (!target) return;
+
+                    const sidebarHeight = sidebar.offsetHeight;
+                    const targetTop = target.getBoundingClientRect().top + window.scrollY - sidebarHeight + 20;
+                    window.scrollTo({ top: targetTop, behavior: 'smooth' });
+                });
+            });
+        }
+
         // Scroll Spy for Sidebar
         function initScrollSpy() {
             const sections = document.querySelectorAll('section[id]');
             const sidebarLinks = document.querySelectorAll('.sidebar-item');
             const sidebar = document.querySelector('.sidebar');
+
+            // sections that share a single sidebar item                                                                                 
+            const sectionAliases = {                                                                                                     
+                'quan-results': 'qual-results',                                                                                          
+            };
 
             const observerOptions = {
                 root: null,
@@ -569,12 +575,13 @@
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
                         const id = entry.target.getAttribute('id');
+                        const linkId = sectionAliases[id] || id;
 
                         sidebarLinks.forEach(link => {
                             link.classList.remove('active');
                         });
 
-                        const activeLink = document.querySelector(`.sidebar-item[href="#${id}"]`);
+                        const activeLink = document.querySelector(`.sidebar-item[href="#${linkId}"]`);
                         if (activeLink) {
                             activeLink.classList.add('active');
 
@@ -622,6 +629,9 @@
                             source.type = 'video/mp4';
                             video.appendChild(source);
                             video.load();
+                            if (video.dataset.playbackRate) {
+                                video.playbackRate = parseFloat(video.dataset.playbackRate);
+                            }
                             video.play();
                             delete video.dataset.src;
                         }
@@ -753,12 +763,301 @@
             }).observe(carousel);
         }
 
+        // Generic Carousel for Ablation
+        class Carousel {
+            constructor(containerId, data, renderItem) {
+                this.container = document.getElementById(containerId);
+                this.data = data;
+                this.renderItem = renderItem;
+                this.currentIndex = 0;
+                this.totalSlides = data.length;
+                this.init();
+                window.addEventListener('resize', () => this.updateHeight());
+                this.container.addEventListener('load', () => this.updateHeight(), true);
+            }
+
+            init() {
+                this.container.innerHTML = `
+                    <div class="carousel-viewport">
+                        <div class="carousel-track">
+                            ${this.data.map(item => `
+                                <div class="carousel-slide">${this.renderItem(item)}</div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <button class="carousel-nav-btn prev"><i class="fa-solid fa-chevron-left"></i></button>
+                    <button class="carousel-nav-btn next"><i class="fa-solid fa-chevron-right"></i></button>
+                    <div class="carousel-dots">
+                        ${this.data.map((_, i) => `
+                            <button class="carousel-dot ${i === 0 ? 'active' : ''}" data-index="${i}"></button>
+                        `).join('')}
+                    </div>
+                `;
+                this.track = this.container.querySelector('.carousel-track');
+                this.dots = this.container.querySelectorAll('.carousel-dots button');
+                this.container.querySelector('.carousel-nav-btn.prev').onclick = () => this.move(-1);
+                this.container.querySelector('.carousel-nav-btn.next').onclick = () => this.move(1);
+                this.dots.forEach((dot, i) => dot.onclick = () => this.goTo(i));
+                setTimeout(() => { this.updateHeight(); this.syncVideos(); }, 100);
+            }
+
+            move(direction) {
+                this.currentIndex = (this.currentIndex + direction + this.totalSlides) % this.totalSlides;
+                this.update();
+            }
+
+            goTo(index) {
+                this.currentIndex = index;
+                this.update();
+            }
+
+            update() {
+                this.track.style.transform = `translateX(-${this.currentIndex * 100}%)`;
+                this.dots.forEach((dot, i) => {
+                    dot.className = `carousel-dot ${i === this.currentIndex ? 'active' : ''}`;
+                });
+                this.updateHeight();
+                this.syncVideos();
+            }
+
+            syncVideos() {
+                const slides = this.container.querySelectorAll('.carousel-slide');
+                slides.forEach((slide, i) => {
+                    const video = slide.querySelector('video');
+                    if (!video) return;
+                    if (i === this.currentIndex) {
+                        if (video.dataset.src) {
+                            const source = document.createElement('source');
+                            source.src = video.dataset.src;
+                            source.type = 'video/mp4';
+                            video.appendChild(source);
+                            video.load();
+                            delete video.dataset.src;
+                            video.addEventListener('loadedmetadata', () => this.updateHeight(), { once: true });
+                        }
+                        if (video.dataset.playbackRate) {
+                            video.playbackRate = parseFloat(video.dataset.playbackRate);
+                        }
+                        video.play();
+                    } else {
+                        video.pause();
+                    }
+                });
+            }
+
+            updateHeight() {
+                const slides = this.container.querySelectorAll('.carousel-slide');
+                if (slides[this.currentIndex]) {
+                    const height = slides[this.currentIndex].offsetHeight;
+                    this.container.querySelector('.carousel-viewport').style.height = `${height}px`;
+                }
+            }
+        }
+
+        const qualData = [
+            { src: 'video/com-dog-agility_0_merged.mp4',  rate: 0.7 },
+            { src: 'video/com-dogs-scale_0_merged.mp4',   rate: 0.7 },
+            { src: 'video/com-varanus-cage_0_merged.mp4', rate: 0.7 },
+            { src: 'video/com-crossing_0_merged.mp4',     rate: 0.7 },
+        ];
+
+        function renderQualSlide(item) {
+            return `
+                <div class="results-slide-content">
+                    <video loop muted playsinline preload="none"
+                            class="qual-slide-video"
+                            data-src="${item.src}"
+                            data-playback-rate="${item.rate}">
+                    </video>
+                </div>
+            `;
+        }
+        
+        const ablationData = [
+            {
+                title: 'Can Training on Human Points Generalize to Non-Human Points?',
+                desc: 'To examine whether training on human points generalize to non-human points, we grouped query points in the TAP-Vid-DAVIS dataset into human and non-human regions and compared performance. Our method shows greater improvement on non-human points.',
+                tables: `
+                    <div class="ablation-item">
+                        
+                        <table class="results-table">
+                            <thead>
+                                <tr><th>Benchmark</th><th style="text-align:left; padding-left:0.5rem;">Method</th><th>AJ&uarr;</th><th>&lt;&delta;<sup>x</sup><sub>avg</sub>&uarr;</th><th>OA&uarr;</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td rowspan="2" style="vertical-align:middle;">DAVIS (Human Only)</td>
+                                    <td style="text-align:left; padding-left:0.5rem;">LocoTrack</td>
+                                    <td>50.7</td><td>42.4</td><td>57.8</td>
+                                </tr>
+                                <tr class="highlight-row">
+                                    <td><strong>Anthro-LocoTrack (Ours)</strong></td>
+                                    <td><strong>51.2</strong> <span style="color:#16a34a">(+0.5)</span></td>
+                                    <td><strong>43.3</strong> <span style="color:#16a34a">(+0.9)</span></td>
+                                    <td><strong>58.6</strong> <span style="color:#16a34a">(+0.8)</span></td>
+                                </tr>
+                                <tr class="separator-row"><td colspan="5"></td></tr>
+                                <tr>
+                                    <td rowspan="2" style="vertical-align:middle;">DAVIS (Non-Human)</td>
+                                    <td style="text-align:left; padding-left:0.5rem;">LocoTrack</td>
+                                    <td>58.8</td><td>73.1</td><td>83.9</td>
+                                </tr>
+                                <tr class="highlight-row">
+                                    <td><strong>Anthro-LocoTrack (Ours)</strong></td>
+                                    <td><strong>60.8</strong> <span style="color:#16a34a">(+2.0)</span></td>
+                                    <td><strong>75.2</strong> <span style="color:#16a34a">(+2.1)</span></td>
+                                    <td><strong>85.3</strong> <span style="color:#16a34a">(+1.4)</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                `,
+            },
+            {
+                title: 'Comparison to Self-Training in CoTracker3',
+                desc: 'We compare our pipeline with self-training introduced in Karaev <i>et al.</i>. <b>(I)</b> CoTracker3 model trained on Kubric. <b>(II)</b> fine-tunes the model on the Let’s Dance (LD) dataset using the self-training introduced in the paper. <b>(III)</b> trains CoTracker3 model using our pipeline. Our method shows greater performance boost than self-training introduced in CoTracker3.',
+                tables: `
+                    <div class="ablation-item">
+                        
+                        <table class="results-table">
+                            <thead>
+                                <tr>
+                                    <th rowspan="2" style="vertical-align:middle;"></th>
+                                    <th rowspan="2" style="vertical-align:middle;">Model</th>
+                                    <th rowspan="2" style="vertical-align:middle;">Train Strategy</th>
+                                    <th rowspan="2" style="vertical-align:middle;">Dataset</th>
+                                    <th colspan="3">DAVIS</th>
+                                </tr>
+                                <tr>
+                                    <th>AJ&uarr;</th>
+                                    <th>&lt;&delta;<sup>x</sup><sub>avg</sub>&uarr;</th>
+                                    <th>OA&uarr;</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>(I)</strong></td>
+                                    <td>CoTracker3</td>
+                                    <td>Supervised</td>
+                                    <td>Kubric</td>
+                                    <td>63.8</td><td>76.3</td><td>90.2</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>(II)</strong></td>
+                                    <td>CoTracker3</td>
+                                    <td>Self-training</td>
+                                    <td>LD</td>
+                                    <td>64.2 <span style="color:#16a34a">(+0.4)</span></td>
+                                    <td>76.5 <span style="color:#16a34a">(+0.2)</span></td>
+                                    <td>89.6 <span style="color:#dc2626">(-0.6)</span></td>
+                                </tr>
+                                <tr class="separator-row"><td colspan="7"></td></tr>
+                                <tr class="highlight-row">
+                                    <td><strong>(III)</strong></td>
+                                    <td>CoTracker3</td>
+                                    <td><strong>AnthroTAP (Ours)</strong></td>
+                                    <td><strong>Anthro-LD</strong></td>
+                                    <td><strong>65.0</strong> <span style="color:#16a34a">(+1.2)</span></td>
+                                    <td><strong>77.3</strong> <span style="color:#16a34a">(+1.0)</span></td>
+                                    <td><strong>90.7</strong> <span style="color:#16a34a">(+0.5)</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                `,
+            },
+            {
+                title: 'Comparison of Track Complexity and Diversity with Existing Datasets',
+                desc: 'We ablate the effect of optical flow-based filtering by comparing it with the baseline that uses trajectories projected from the human mesh and occlusion prediction via ray casting. While the baseline already achieves strong performance, applying trajectory rejection yields a further performance boost.',
+                tables: `
+                    <div class="ablation-item">
+                        
+                        <table class="results-table">
+                            <thead>
+                                <tr>
+                                    <th rowspan="2" style="vertical-align:middle;">Training Dataset</th>
+                                    <th rowspan="2" style="vertical-align:middle;">Data Type</th>
+                                    <th colspan="2">Traj Metrics</th>
+                                </tr>
+                                <tr>
+                                    <th>Complexity</th>
+                                    <th>Diversity</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>DriveTrack</td><td>Real</td><td>0.4396</td><td>0.0073</td></tr>
+                                <tr><td>PointOdyssey</td><td>Synthetic</td><td>0.5222</td><td><strong>0.1597</strong></td></tr>
+                                <tr><td>Kubric</td><td>Synthetic</td><td>0.1772</td><td>0.1165</td></tr>
+                                <tr class="separator-row"><td colspan="4"></td></tr>
+                                <tr class="highlight-row">
+                                    <td><strong>Anthro-LD (Ours)</strong></td>
+                                    <td>Real</td>
+                                    <td><strong>1.2492</strong></td>
+                                    <td>0.1008</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                `,
+            },
+            {
+                title: 'Ablation on Optical Flow Based Track Rejection',
+                desc: 'We also provide a comparative analysis of prevalent point tracking training datasets, focusing on trajectory complexity and diversity.',
+                tables: `
+                    <div class="ablation-item">
+                        
+                        <table class="results-table">
+                            <thead>
+                                <tr>
+                                    <th rowspan="2" style="vertical-align:middle;">Method</th>
+                                    <th colspan="3">DAVIS</th>
+                                </tr>
+                                <tr>
+                                    <th>AJ&uarr;</th>
+                                    <th>&lt;&delta;<sup>x</sup><sub>avg</sub>&uarr;</th>
+                                    <th>OA&uarr;</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Baseline</td>
+                                    <td>64.4</td><td>76.9</td><td>88.6</td>
+                                </tr>
+                                <tr class="separator-row"><td colspan="4"></td></tr>
+                                <tr class="highlight-row">
+                                    <td><strong>+ Optical flow based rejection</strong></td>
+                                    <td><strong>64.8</strong></td>
+                                    <td><strong>77.3</strong></td>
+                                    <td><strong>89.1</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                `,
+            },
+        ];
+
+        function renderAblationSlide(item) {
+            return `
+                <div class="results-slide-content">
+                    <h3 class="results-slide-title">${item.title}</h3>
+                    <div class="ablation-full-container">
+                        ${item.tables}
+                    </div>
+                    <div class="results-caption"><p>${item.desc}</p></div>
+                </div>
+            `;
+        }
+
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
+            initSidebarScroll();
             initScrollSpy();
             initFadeInAnimations();
             initLazyVideos();
             initTeaserCarousel();
+            new Carousel('carousel-qual', qualData, renderQualSlide);
+            new Carousel('carousel-abl', ablationData, renderAblationSlide);
         });
     </script>
 </body>
