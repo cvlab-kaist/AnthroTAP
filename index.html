@@ -2,29 +2,22 @@
 <html lang="en">
 
 <head>
-    <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-TNC295S7');</script>
-    <!-- End Google Tag Manager -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seoul World Model: Grounding World Simulation Models in a Real-World Metropolis</title>
+    <title>AnthroTAP: Learning Point Tracking with Real-World Motion</title>
     <meta name="description"
-        content="Seoul World Model (SWM): a city-scale world model grounded in the real city of Seoul.">
+        content="AnthroTAP: Learning Point Tracking with Real-World Motion.">
 
     <!-- Open Graph -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://seoul-world-model.github.io/">
-    <meta property="og:title" content="Grounding World Simulation Models in a Real-World Metropolis">
+    <meta property="og:url" content="https://cvlab-kaist.github.io/AnthroTAP/">
+    <meta property="og:title" content="Learning Point Tracking with Real-World Motion">
     <meta property="og:description"
-        content="Seoul World Model (SWM): a city-scale world model grounded in the real city of Seoul.">
+        content="AnthroTAP: Learning Point Tracking with Real-World Motion.">
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title"
-        content="Grounding World Simulation Models in a Real-World Metropolis">
+        content="Learning Point Tracking with Real-World Motion">
 
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
     <link rel="icon" type="image/png" sizes="256x256" href="assets/favicon-256.png">
@@ -35,17 +28,13 @@
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.1/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TNC295S7"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <!-- End Google Tag Manager (noscript) -->
-
     <!-- Sidebar Navigation -->
     <div class="sidebar">
         <a href="#tldr" class="sidebar-item">
@@ -90,64 +79,164 @@
     <section id="tldr" class="hero-section">
         <div class="hero-container">
             <h1 class="hero-title">
-                <span class="gradient-text">Seoul World Model</span>:<br>
-                <span class="hero-subtitle">Grounding World Simulation Models<br> in a Real-World Metropolis</span>
+                <span class="gradient-text">AnthroTAP</span>:<br>
+                <span class="hero-subtitle">Learning Point Tracking with Real-World Motion</span>
             </h1>
+
+            <!-- Status -->
+            <p class="hero-status">CVPR 2026</p>
 
             <!-- Authors -->
             <div class="hero-authors">
-                <span><a href="https://j0seo.github.io/" target="_blank" rel="noopener noreferrer">Junyoung
-                        Seo</a><sup>*1</sup></span>
-                <span><a href="https://eenrue.github.io/" target="_blank" rel="noopener noreferrer">Hyunwook Choi</a><sup>*1</sup></span>
-                <span><a href="https://mkxdxdxd.github.io/" target="_blank" rel="noopener noreferrer">Minkyung Kwon</a><sup>1</sup></span>
-                <span><a href="https://wlsguur.github.io/" target="_blank" rel="noopener noreferrer">Jinhyeok Choi</a><sup>1</sup></span>
-                <span><a href="https://jinsy515.github.io/my-page/" target="_blank" rel="noopener noreferrer">Siyoon Jin</a><sup>1</sup></span>
-                <span><a href="https://sites.google.com/site/gylee1103" target="_blank" rel="noopener noreferrer">Gayoung Lee</a><sup>2</sup></span>
-                <span><a href="https://github.com/taki0112" target="_blank" rel="noopener noreferrer">Junho Kim</a><sup>2</sup></span>
-                <span>JoungBin Lee<sup>1</sup></span>
-                <span><a href="https://geonm.github.io/" target="_blank" rel="noopener noreferrer">Geonmo Gu</a><sup>2</sup></span>
-                <span><a href="https://sites.google.com/site/dyhan0920/" target="_blank" rel="noopener noreferrer">Dongyoon Han</a><sup>2,1</sup></span>
-                <span><a href="https://sangdooyun.github.io/" target="_blank" rel="noopener noreferrer">Sangdoo Yun</a><sup>2,3</sup></span>
-                <span><a href="https://cvlab.kaist.ac.kr" target="_blank" rel="noopener noreferrer">Seungryong
-                        Kim</a><sup>&dagger;1</sup></span>
-                <span><a href="https://wityworks.com/" target="_blank" rel="noopener noreferrer">Jin-Hwa Kim</a><sup>&dagger;2,3</sup></span>
+                <span><a href="https://sites.google.com/view/ines-hyeonsu-kim/home" target="_blank" rel="noopener noreferrer">Inès Hyeonsu Kim</a><sup>1,3*</sup> &nbsp;</span>
+                <span><a href="https://sites.google.com/view/seokjucho/home" target="_blank" rel="noopener noreferrer">Seokju Cho</a><sup>1*</sup> &nbsp;</span>
+                <span><a href="https://jahyeok-koo.github.io/" target="_blank" rel="noopener noreferrer">Jahyeok Koo</a><sup>1</sup> &nbsp;</span>
+                <span><a href="https://junghyun-james-park.github.io/" target="_blank" rel="noopener noreferrer">Junghyun Park</a><sup>1</sup></span>
+                <div style="width: 100%;"></div>
+                <span><a href="https://gabriel-huang.github.io" target="_blank" rel="noopener noreferrer">Jiahui Huang</a><sup>2</sup> &nbsp;</span>
+                <span><a href="https://web.eecs.umich.edu/~honglak/" target="_blank" rel="noopener noreferrer">Honglak Lee</a><sup>34</sup> &nbsp;</span>
+                <span><a href="https://joonyoung-cv.github.io" target="_blank" rel="noopener noreferrer">Joon-Young Lee</a><sup>2</sup> &nbsp;</span>
+                <span><a href="https://cvlab.kaist.ac.kr/" target="_blank" rel="noopener noreferrer">Seungryong Kim</a><sup>1</sup></span>
             </div>
 
             <div class="hero-affiliations">
                 <span><sup>1</sup>KAIST AI</span>
-                <span><sup>2</sup>NAVER AI Lab</span>
-                <span><sup>3</sup>SNU AIIS</span>
+                <span><sup>2</sup>Adobe Research</span>
+                <span><sup>3</sup>University of Michigan</span>
+                <span><sup>4</sup>LG AI Research</span>
             </div>
 
             <div class="hero-notes">
                 <span>*: Equal contribution</span>
-                <span>&dagger;: Co-corresponding authors</span>
             </div>
 
             <!-- Link Buttons -->
             <div class="hero-buttons">
-                <a href="SWM_paper.pdf" class="btn" target="_blank" rel="noopener">
-                    <i class="fa-solid fa-file-pdf"></i> Paper
+                <a href="https://arxiv.org/abs/2507.06233" class="btn" target="_blank" rel="noopener noreferrer">
+                    <i class="ai ai-arxiv"></i> arXiv
                 </a>
-                <a href="https://arxiv.org/abs/2603.15583" class="btn btn-outline" target="_blank" rel="noopener noreferrer">
-                    <i class="fa-solid fa-book"></i> arXiv
+                <a href="https://github.com/cvlab-kaist/AnthroTAP" class="btn btn-outline" target="_blank" rel="noopener">
+                    <i class="fa-brands fa-github"></i> Code
                 </a>
-                <a href="video.html" class="btn btn-outline" target="_blank" rel="noopener">
-                    <i class="fa-solid fa-video"></i> Full Video
-                </a>
-                <a href="https://github.com/naver-ai/seoul-world-model" class="btn btn-outline" target="_blank" rel="noopener noreferrer">
-                    <i class="fa-brands fa-github"></i> Code & Weights
+                <a href="" class="btn btn-outline" target="_blank" rel="noopener noreferrer">
+                    <i class="fa-solid fa-database"></i> Data (comming soon)
                 </a>
             </div>
         </div>
 
-        <!-- Hero Teaser Video -->
+        <!-- Hero Teaser Video Carousel -->
         <div class="teaser-container">
-            <div class="video-container" style="max-width: 72rem; margin: 0 auto 2rem auto;">
-                <video class="hero-video" autoplay loop muted playsinline>
-                    <source src="video/page-teaser-1.mp4" type="video/mp4">
-                </video>
-                <span class="video-caption">AI-Generated Video by SWM</span>
+            <div class="video-carousel" id="teaser-carousel">
+                <div class="carousel-track">
+                    <div class="carousel-item">
+                        <video class="hero-video" autoplay loop muted playsinline>
+                            <source src="video/0_300.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="carousel-item">
+                        <video class="hero-video" autoplay loop muted playsinline>
+                            <source src="video/1_300.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="carousel-item">
+                        <video class="hero-video" autoplay loop muted playsinline>
+                            <source src="video/4_300.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <!-- <div class="carousel-item">
+                        <video class="hero-video" autoplay loop muted playsinline>
+                            <source src="video/26_300.mp4" type="video/mp4">
+                        </video>
+                    </div> -->
+                    <div class="carousel-item">
+                        <video class="hero-video" loop muted playsinline preload="none">
+                            <source src="video/31_300.mp4" type="video/mp4">
+                        </video>
+                    </div>
+                    <div class="carousel-item">
+                        <video class="hero-video" loop muted playsinline preload="none">
+                            <source src="video/43_300.mp4" type="video/mp4">                            
+                        </video>
+                    </div>
+                    <div class="carousel-item">
+                        <video class="hero-video" loop muted playsinline preload="none">
+                            <source src="video/49_300.mp4" type="video/mp4">                            
+                        </video>
+                    </div>
+                    <div class="carousel-item">
+                        <video class="hero-video" loop muted playsinline preload="none">
+                            <source src="video/51_300.mp4" type="video/mp4">                            
+                        </video>
+                    </div>
+                    <div class="carousel-item">
+                        <video class="hero-video" loop muted playsinline preload="none">
+                            <source src="video/212_300.mp4" type="video/mp4">                            
+                        </video>
+                    </div>
+                    <div class="carousel-item">
+                        <video class="hero-video" loop muted playsinline preload="none">
+                            <source src="video/267_241.mp4" type="video/mp4">                            
+                        </video>
+                    </div>
+                    <!-- <div class="carousel-item">
+                        <video class="hero-video" loop muted playsinline preload="none">
+                            <source src="video/368_300.mp4" type="video/mp4">                            
+                        </video>
+                    </div> -->
+                    <div class="carousel-item">
+                        <video class="hero-video" loop muted playsinline preload="none">
+                            <source src="video/563_300.mp4" type="video/mp4">                            
+                        </video>
+                    </div>
+                    <div class="carousel-item">
+                        <video class="hero-video" loop muted playsinline preload="none">
+                            <source src="video/567_300.mp4" type="video/mp4">                            
+                        </video>
+                    </div>
+                    <div class="carousel-item">
+                        <video class="hero-video" loop muted playsinline preload="none">
+                            <source src="video/704_300.mp4" type="video/mp4">                            
+                        </video>
+                    </div>
+                    <!-- <div class="carousel-item">
+                        <video class="hero-video" loop muted playsinline preload="none">
+                            <source src="video/710_300.mp4" type="video/mp4">                            
+                        </video>
+                    </div> -->
+                    <div class="carousel-item">
+                        <video class="hero-video" autoplay loop muted playsinline>
+                            <source src="video/731_300.mp4" type="video/mp4">                            
+                        </video>
+                    </div>
+                    <div class="carousel-item">
+                        <video class="hero-video" autoplay loop muted playsinline>
+                            <source src="video/751_251.mp4" type="video/mp4">                            
+                        </video>
+                    </div>
+                    <!-- <div class="carousel-item">
+                        <video class="hero-video" autoplay loop muted playsinline>
+                            <source src="video/880_300.mp4" type="video/mp4">                            
+                        </video>
+                    </div> -->
+                </div>
+                <button class="carousel-btn carousel-prev" aria-label="Previous">&#8249;</button>
+                <button class="carousel-btn carousel-next" aria-label="Next">&#8250;</button>
+            </div>
+            <div class="carousel-dots">
+                <span class="carousel-dot active"></span>
+                <span class="carousel-dot"></span>
+                <span class="carousel-dot"></span>
+                <span class="carousel-dot"></span>
+                <span class="carousel-dot"></span>
+                <span class="carousel-dot"></span>
+                <span class="carousel-dot"></span>
+                <span class="carousel-dot"></span>
+                <span class="carousel-dot"></span>
+                <span class="carousel-dot"></span>
+                <span class="carousel-dot"></span>
+                <span class="carousel-dot"></span>
+                <span class="carousel-dot"></span>
+                <span class="carousel-dot"></span>
             </div>
         </div>
 
@@ -157,11 +246,8 @@
                 <div class="tldr-content">
                     <span class="tldr-label">TL;DR</span>
                     <p class="tldr-text">
-                        What if a world model could render not an imagined place, but the real city outside your window?
-                        We built <span class="tldr-highlight">Seoul World Model (SWM)</span>,
-                        <span class="tldr-highlight">grounded in the actual streets of Seoul</span>.
-                        Through RAG on millions of street-view images, SWM produces faithful videos
-                        spanning kilometers of real cityscape.
+                        <span class="tldr-highlight">AnthroTAP</span> generates highly complex pseudo-labeled data for point tracking
+                        by leveraging the inherent complexities of human motion captured in videos.
                     </p>
                 </div>
             </div>
@@ -403,23 +489,24 @@
                 <button onclick="copyBibtex()" class="citation-copy-btn">
                     <i class="fa-regular fa-copy"></i> Copy
                 </button>
-                <div id="bibtex-text" style="display: none;">[TBD]</div>
-                <pre class="citation-code"><code id="bibtex-code">[TBD]</code></pre>
+                <div id="bibtex-text" style="display: none;">@article{kim2025learning,
+  title     = {AnthroTAP: Learning Point Tracking with Real-World Motion},
+  author    = {Kim, In{\`e}s Hyeonsu and Cho, Seokju and Koo, Jahyeok and Park, Junghyun and Huang, Jiahui and Lee, Honglak and Lee, Joon-Young and Kim, Seungryong},
+  journal   = {arXiv preprint arXiv:2507.06233},
+  year      = {2025},
+}</div>
+                <pre class="citation-code"><code id="bibtex-code">@article{kim2025learning,
+  title     = {AnthroTAP: Learning Point Tracking with Real-World Motion},
+  author    = {Kim, In{\`e}s Hyeonsu and Cho, Seokju and Koo, Jahyeok and Park, Junghyun and Huang, Jiahui and Lee, Honglak and Lee, Joon-Young and Kim, Seungryong},
+  journal   = {arXiv preprint arXiv:2507.06233},
+  year      = {2025},
+}</code></pre>
             </div>
         </div>
     </section>
 
-    <!-- Industry-Academic Note -->
-    <section style="padding: 1.5rem 0 0 0;">
-        <div class="container">
-            <p style="font-size: 0.85rem; color: var(--color-text-muted); line-height: 1.5; margin: 0;">
-                This work is an industry-academic collaboration between NAVER and KAIST, utilizing NAVER Map data.
-            </p>
-        </div>
-    </section>
-
     <!-- Acknowledgements -->
-    <section style="padding: 2rem 0;">
+    <!-- <section style="padding: 2rem 0;">
         <div class="container">
             <h2 style="font-size: 1.1rem; font-weight: 600; color: var(--color-text-muted); margin-bottom: 0.75rem;">Acknowledgements</h2>
             <p style="font-size: 0.95rem; color: var(--color-text-muted); line-height: 1.6; margin: 0;">
@@ -430,11 +517,15 @@
                 map data and metadata. Finally, we thank Jonghak Kim, Jieun Shin, and Hyeeun Shin for valuable
                 discussions and thoughtful feedback. Their support and collaboration are greatly appreciated.
             </p>
-            <div style="display: flex; justify-content: flex-end; margin-top: 1rem;">
-                <a href="https://hits.sh/seoul-world-model.github.io/"><img alt="Hits" src="https://hits.sh/seoul-world-model.github.io.svg?view=today-total&style=for-the-badge&color=97ca00"/></a>
-            </div>
         </div>
-    </section>
+    </section> -->
+
+    <!-- Footer -->
+    <footer class="footer fade-in-section is-visible">
+        <div class="container">
+            <p>Credit: The design of this project page is inspired by previous academic project pages, <a href="https://cvlab-kaist.github.io/CAMEO/" target="_blank">CAMEO</a> and <a href="https://seoul-world-model.github.io/" target="_blank">Seoul World Model</a>.</p>
+        </div>
+    </footer>
 
 
     <script>
@@ -544,19 +635,130 @@
             videos.forEach(video => observer.observe(video));
         }
 
+        // Teaser Carousel
+        function initTeaserCarousel() {
+            const carousel = document.getElementById('teaser-carousel');
+            if (!carousel) return;
+
+            const track = carousel.querySelector('.carousel-track');
+            const dots = document.querySelectorAll('.carousel-dots .carousel-dot');
+            const prevBtn = carousel.querySelector('.carousel-prev');
+            const nextBtn = carousel.querySelector('.carousel-next');
+            const SLIDES_TO_SHOW = 2.5;
+            const MARGIN = 4; // 2px each side
+            const CLONES = 3;
+
+            const originals = Array.from(track.querySelectorAll('.carousel-item'));
+            const total = originals.length;
+
+            // Prepend clones of last CLONES items, append clones of first CLONES items
+            originals.slice(-CLONES).reverse().forEach(item => {
+                track.prepend(item.cloneNode(true));
+            });
+            originals.slice(0, CLONES).forEach(item => {
+                track.appendChild(item.cloneNode(true));
+            });
+
+            let current = CLONES; // Start at first real item
+            let cachedItemWidth = 0;
+
+            function updateItemWidths() {
+                const containerWidth = carousel.getBoundingClientRect().width;
+                // Each item's total space = containerWidth / SLIDES_TO_SHOW
+                // With box-sizing: border-box, minWidth = total space - margin
+                cachedItemWidth = containerWidth / SLIDES_TO_SHOW;
+                const contentWidth = cachedItemWidth - MARGIN;
+                track.querySelectorAll('.carousel-item').forEach(item => {
+                    item.style.minWidth = contentWidth + 'px';
+                    item.style.maxWidth = contentWidth + 'px';
+                });
+            }
+
+            function setPosition(index, animate) {
+                track.style.transition = animate ? 'transform 0.4s ease' : 'none';
+                track.style.transform = `translateX(-${index * cachedItemWidth}px)`;
+                if (!animate) track.offsetHeight; // force reflow
+            }
+
+            function loadVisible(index) {
+                const all = track.querySelectorAll('.carousel-item');
+                for (let i = index; i < Math.min(index + 3, all.length); i++) {
+                    const video = all[i].querySelector('video');
+                    if (!video) continue;
+                    if (video.readyState === 0) {
+                        video.load();
+                        video.addEventListener('canplay', () => video.play().catch(() => {}), { once: true });
+                    } else {
+                        video.play().catch(() => {});
+                    }
+                }
+            }
+
+            function updateDots(index) {
+                const realIndex = (index - CLONES + total) % total;
+                dots.forEach((dot, i) => dot.classList.toggle('active', i === realIndex));
+            }
+
+            function goTo(index) {
+                current = index;
+                setPosition(current, true);
+                loadVisible(current);
+                updateDots(current);
+            }
+
+            // Infinite loop: silently jump when reaching clone zone
+            function syncVideoTime(srcItem, dstItem) {
+                const src = srcItem?.querySelector('video');
+                const dst = dstItem?.querySelector('video');
+                if (src && dst && src.readyState >= 1 && dst.readyState >= 1) {
+                    if (Math.abs(src.currentTime - dst.currentTime) > 0.05) {
+                        dst.currentTime = src.currentTime;
+                    }
+                }
+            }
+
+            // Continuously keep clones in sync with originals
+            setInterval(() => {
+                const all = Array.from(track.querySelectorAll('.carousel-item'));
+                for (let i = 0; i < CLONES; i++) {
+                    // orig → prepended clone
+                    syncVideoTime(all[total + i], all[i]);
+                    // orig → appended clone
+                    syncVideoTime(all[CLONES + i], all[CLONES + total + i]);
+                }
+            }, 200);
+
+            track.addEventListener('transitionend', () => {
+                const all = Array.from(track.querySelectorAll('.carousel-item'));
+                if (current < CLONES) {
+                    current += total;
+                    setPosition(current, false);
+                } else if (current >= CLONES + total) {
+                    current -= total;
+                    setPosition(current, false);
+                }
+            });
+
+            updateItemWidths();
+            setPosition(current, false);
+            loadVisible(current);
+
+            prevBtn.addEventListener('click', () => goTo(current - 1));
+            nextBtn.addEventListener('click', () => goTo(current + 1));
+            dots.forEach((dot, i) => dot.addEventListener('click', () => goTo(i + CLONES)));
+
+            new ResizeObserver(() => {
+                updateItemWidths();
+                setPosition(current, false);
+            }).observe(carousel);
+        }
+
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
             initScrollSpy();
             initFadeInAnimations();
             initLazyVideos();
-
-            const heroVideo = document.querySelector('video.hero-video');
-            if (heroVideo) {
-                heroVideo.addEventListener('playing', function onPlaying() {
-                    heroVideo.classList.add('loaded');
-                    heroVideo.removeEventListener('playing', onPlaying);
-                });
-            }
+            initTeaserCarousel();
         });
     </script>
 </body>

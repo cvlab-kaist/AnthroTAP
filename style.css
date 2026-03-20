@@ -300,6 +300,15 @@ p {
     }
 }
 
+.hero-status {
+    font-size: 1.4rem;
+    color: var(--color-primary-dark);
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    justify-content: center;
+    display: flex;
+}
+
 .hero-authors {
     display: flex;
     flex-wrap: wrap;
@@ -403,7 +412,7 @@ p {
 /* Teaser & TL;DR */
 .teaser-container {
     width: 100%;
-    max-width: 1800px;
+    max-width: 1300px;
     margin: 0 auto;
     padding: 0 1rem;
 }
@@ -523,6 +532,84 @@ video.lazy-video.loaded {
     font-size: 0.8rem;
     color: var(--color-text-light);
     margin-top: 0.05rem;
+}
+
+/* Teaser Video Carousel */
+.video-carousel {
+    position: relative;
+    width: 100%;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.carousel-track {
+    display: flex;
+    transition: transform 0.4s ease;
+}
+
+.carousel-item {
+    flex-shrink: 0;
+    box-sizing: border-box;
+    margin: 2px;
+    overflow: hidden;
+    border: 1px solid #bbb;
+    border-radius: 10px;
+}
+
+.carousel-item video {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: contain;
+    display: block;
+}
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.4);
+    color: white;
+    border: none;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    font-size: 1.75rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: background 0.2s;
+    line-height: 1;
+}
+
+.carousel-btn:hover {
+    background: rgba(0, 0, 0, 0.65);
+}
+
+.carousel-prev { left: 0.75rem; }
+.carousel-next { right: 0.75rem; }
+
+.carousel-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.45rem;
+    margin-top: 0.4rem;
+    margin-bottom: 0.6rem;
+}
+
+.carousel-dot {
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 50%;
+    background: var(--color-border);
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.carousel-dot.active {
+    background: var(--color-primary);
 }
 
 .speed-label {
@@ -668,6 +755,7 @@ video.lazy-video.loaded {
 .footer p {
     margin: 0;
     color: var(--color-text-muted);
+    font-size: 0.85rem;
 }
 
 /* Animations */
