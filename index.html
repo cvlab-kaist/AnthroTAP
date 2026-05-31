@@ -6,60 +6,472 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AnthroTAP: Learning Point Tracking with Real-World Motion</title>
     <meta name="description"
-        content="AnthroTAP: Learning Point Tracking with Real-World Motion.">
+        content="AnthroTAP generates large-scale pseudo-labeled point tracking data from real human motion videos, achieving state-of-the-art on TAP-Vid with orders of magnitude less training data.">
 
-    <!-- Open Graph -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://cvlab-kaist.github.io/AnthroTAP/">
-    <meta property="og:title" content="Learning Point Tracking with Real-World Motion">
+    <meta property="og:title" content="AnthroTAP: Learning Point Tracking with Real-World Motion">
     <meta property="og:description"
-        content="AnthroTAP: Learning Point Tracking with Real-World Motion.">
-
+        content="AnthroTAP generates highly complex pseudo-labeled data for point tracking by leveraging the inherent complexities of human motion captured in videos.">
+    
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title"
-        content="Learning Point Tracking with Real-World Motion">
+    <meta name="twitter:title" content="AnthroTAP: Learning Point Tracking with Real-World Motion">
 
-    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
-    <link rel="icon" type="image/png" sizes="256x256" href="assets/favicon-256.png">
-    <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-64.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
-
-    <!-- Fonts and Icons -->
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/gh/wanteddev/wanted-sans@v1.0.1/packages/wanted-sans/fonts/webfonts/variable/split/WantedSansVariable.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-    
-    <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css">
 
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        /* Override brand colors for AnthroTAP: violet instead of green */
+        :root {
+            --color-primary: #7c3aed;
+            --color-primary-light: #8b5cf6;
+            --color-primary-dark: #6d28d9;
+            --color-bg-alt: #f5f3ff;
+        }
+        .sidebar-item:hover .sidebar-dot,
+        .sidebar-item.active .sidebar-dot {
+            background-color: #8b5cf6;
+        }
+        .sidebar-item:hover .sidebar-label,
+        .sidebar-item.active .sidebar-label {
+            color: #7c3aed;
+        }
+        .sidebar::after {
+            background: linear-gradient(to bottom, transparent, #7c3aed, #7c3aed, transparent);
+        }
+        .hero-title .gradient-text {
+            background: linear-gradient(135deg, #7c3aed, #c026d3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .tldr-highlight { color: #7c3aed; }
+        .tldr-label { background-color: #7c3aed; }
+        .tldr-box { border-color: #7c3aed; }
+        .section-title { color: #6d28d9; }
 
+        /* Hero status badge */
+        .hero-status {
+            display: inline-block;
+            background: linear-gradient(135deg, #7c3aed, #c026d3);
+            color: white;
+            font-size: 0.9rem;
+            font-weight: 700;
+            padding: 0.25rem 1.2rem;
+            border-radius: 9999px;
+            margin-bottom: 1.25rem;
+            letter-spacing: 0.05em;
+        }
+
+        /* Stat cards */
+        .stat-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        @media (max-width: 640px) { .stat-cards { grid-template-columns: 1fr; } }
+        .stat-card {
+            background: white;
+            border: 1px solid var(--color-border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            text-align: center;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        }
+        .stat-card .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: #7c3aed;
+            line-height: 1.1;
+        }
+        .stat-card .stat-label {
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+            margin-top: 0.25rem;
+            line-height: 1.4;
+        }
+
+        /* Motivation cards */
+        .motivation-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        @media (max-width: 768px) { .motivation-grid { grid-template-columns: 1fr; } }
+        .motivation-card {
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--color-border);
+        }
+        .motivation-card.problem { background: #fef2f2; border-color: #fecaca; }
+        .motivation-card.solution { background: #f5f3ff; border-color: #c4b5fd; }
+        .motivation-card h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+        .motivation-card.problem h4 { color: #dc2626; }
+        .motivation-card.solution h4 { color: #7c3aed; }
+        .motivation-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .motivation-card ul li {
+            font-size: 0.95rem;
+            color: var(--color-text-main);
+            padding: 0.3rem 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            line-height: 1.5;
+        }
+        .motivation-card ul li::before {
+            content: '✗';
+            font-weight: 700;
+            flex-shrink: 0;
+            margin-top: 0.05rem;
+        }
+        .motivation-card.solution ul li::before { content: '✓'; color: #7c3aed; }
+        .motivation-card.problem ul li::before { color: #dc2626; }
+
+        /* Human motion insight box */
+        .insight-box {
+            background: linear-gradient(135deg, #f5f3ff, #fdf4ff);
+            border: 2px solid #c4b5fd;
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            margin: 2rem 0;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        .insight-icon {
+            font-size: 2.5rem;
+            flex-shrink: 0;
+        }
+        .insight-text { font-size: 1.1rem; line-height: 1.6; color: var(--color-text-main); }
+        .insight-text strong { color: #7c3aed; }
+
+        /* Trajectory complexity bars */
+        .complexity-bars {
+            margin: 1.5rem 0;
+        }
+        .bar-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 0.75rem;
+        }
+        .bar-label {
+            width: 130px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--color-text-main);
+            flex-shrink: 0;
+            text-align: right;
+        }
+        .bar-label .data-type {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+            font-weight: 400;
+        }
+        .bar-track {
+            flex: 1;
+            background: var(--color-border);
+            border-radius: 4px;
+            height: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+        .bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            background: var(--color-border);
+            transition: width 1s ease;
+            position: relative;
+        }
+        .bar-fill.ours {
+            background: linear-gradient(90deg, #7c3aed, #c026d3);
+        }
+        .bar-fill.other { background: #94a3b8; }
+        .bar-value {
+            width: 3rem;
+            flex-shrink: 0;
+            text-align: left;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-text-main);
+            white-space: nowrap;
+        }
+
+        /* Qual comparison header */
+        .qual-header-table {
+            /* width/margin handled by style.css: calc(100% - 3rem) / margin: 0 1.5rem */
+            table-layout: fixed;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-align: center;
+            color: var(--color-text-muted);
+            margin-bottom: 0;
+        }
+        .qual-header-table td {
+            padding: 0.3rem 0;
+        }
+        .qual-header-table td:last-child { color: #7c3aed; font-weight: 700; }
+
+        /* Qual carousel wrapper */
+        .qual-carousel-wrapper {
+            max-width: 100%;
+        }
+
+        /* Results carousel */
+        .result-carousel {
+            position: relative;
+            width: 100%;
+        }
+        .carousel-viewport {
+            overflow: hidden;
+            position: relative;
+            transition: height 0.3s ease;
+        }
+        .result-carousel .carousel-track {
+            display: flex;
+            transition: transform 0.4s ease;
+        }
+        .result-carousel .carousel-slide {
+            min-width: 100%;
+            box-sizing: border-box;
+        }
+        .results-slide-content { width: 100%; }
+        .qual-slide-video { width: 100%; border-radius: 0.5rem; display: block; }
+        .results-slide-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--color-text-main);
+            margin-bottom: 1rem;
+        }
+        .results-caption p {
+            font-size: 0.9rem;
+            color: var(--color-text-muted);
+            margin: 0.5rem 0 0 0;
+            text-align: center;
+        }
+        .carousel-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.9);
+            border: 1px solid var(--color-border);
+            border-radius: 50%;
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: var(--color-text-main);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            transition: all 0.2s;
+            z-index: 10;
+        }
+        .carousel-nav-btn:hover { background: white; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .carousel-nav-btn.prev { left: -1.25rem; }
+        .carousel-nav-btn.next { right: -1.25rem; }
+        .result-carousel .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        .result-carousel .carousel-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--color-border);
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+            padding: 0;
+        }
+        .result-carousel .carousel-dot.active { background: #7c3aed; }
+
+        /* Quantitative table */
+        .quan-table-wrapper { overflow-x: auto; margin: 1rem 0; }
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82rem;
+            text-align: center;
+        }
+        .results-table th, .results-table td {
+            padding: 0.4rem 0.35rem;
+            border-bottom: 1px solid var(--color-border-light);
+            white-space: nowrap;
+        }
+        .results-table th {
+            font-weight: 700;
+            color: var(--color-text-main);
+            border-bottom: 2px solid #94a3b8;
+        }
+        .results-table thead th {
+            background: #f8f7ff;
+        }
+        /* Vertical group separators in thead */
+        .quan-table-wrapper .results-table thead tr:first-child th:nth-child(n+3),
+        .quan-table-wrapper .results-table thead tr:last-child th:nth-child(3n+1) {
+            border-left: 1px solid #94a3b8;
+        }
+        /* Extend vertical group separators into tbody (cols 3, 6, 9, 12) */
+        .quan-table-wrapper .results-table tbody td:nth-child(3n) {
+            border-left: 1px solid #94a3b8;
+        }
+        /* improvement-row has colspan=2 as first cell, shifting positions by 1 */
+        .quan-table-wrapper .results-table tbody .improvement-row td:nth-child(3n) {
+            border-left: none;
+        }
+        .quan-table-wrapper .results-table tbody .improvement-row td:nth-child(3n+2) {
+            border-left: 1px solid #94a3b8;
+        }
+        .results-table .section-header-row td {
+            background: #f1f5f9;
+            font-style: italic;
+            color: var(--color-text-muted);
+            text-align: center;
+            font-size: 0.8rem;
+            border-bottom: 1px solid var(--color-border-light);
+        }
+        .results-table .section-header-row.double-top td {
+            border-top: 3px double #94a3b8;
+        }
+        .results-table .separator-row td { padding: 0; border: none; height: 4px; }
+        .results-table .highlight-row td { background: #ede9fe; font-weight: 600; color: var(--color-primary-dark); }
+        .results-table .improvement-row td {
+            background: #ede9fe;
+            color: #7c3aed;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .quan-table-caption {
+            caption-side: bottom;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+            padding: 0.75rem;
+        }
+
+        /* Ablation */
+        .ablation-item { overflow-x: auto; }
+        .ablation-full-container { margin: 0.5rem 0; }
+        .ablation-item .results-table { table-layout: fixed; }
+        /* Ablation table column separator: between descriptor cols and metric cols */
+        .ablation-item .results-table .abl-col-sep,
+        .ablation-item .abl-sep-2 th:nth-child(2),
+        .ablation-item .abl-sep-2 td:nth-child(2),
+        .ablation-item .abl-sep-3 th:nth-child(3),
+        .ablation-item .abl-sep-3 td:nth-child(3),
+        .ablation-item .abl-sep-5 th:nth-child(5),
+        .ablation-item .abl-sep-5 td:nth-child(5) {
+            border-left: 1px solid #94a3b8;
+        }
+
+        /* Teaser carousel */
+        .video-carousel {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+        }
+        .video-carousel .carousel-track {
+            display: flex;
+            transition: transform 0.4s ease;
+        }
+        .carousel-item {
+            flex-shrink: 0;
+            padding: 0 2px;
+            box-sizing: border-box;
+        }
+        .carousel-item video {
+            width: 100%;
+            border-radius: 0.5rem;
+            display: block;
+        }
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.85);
+            border: 1px solid var(--color-border);
+            border-radius: 50%;
+            width: 2.5rem;
+            height: 2.5rem;
+            font-size: 1.5rem;
+            line-height: 1;
+            cursor: pointer;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            transition: all 0.2s;
+        }
+        .carousel-btn:hover { background: white; }
+        .carousel-prev { left: 0.5rem; }
+        .carousel-next { right: 0.5rem; }
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 0.75rem;
+        }
+        .carousel-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--color-border);
+            cursor: pointer;
+            transition: background 0.2s;
+            border: none;
+        }
+        .carousel-dot.active { background: #7c3aed; }
+    </style>
 </head>
 
 <body>
-    <!-- Sidebar Navigation -->
+    <!-- Sidebar -->
     <div class="sidebar">
         <a href="#tldr" class="sidebar-item">
             <div class="sidebar-dot"></div>
             <span class="sidebar-label">TL;DR</span>
         </a>
-        <a href="#abstract" class="sidebar-item">
+        <a href="#motivation" class="sidebar-item">
             <div class="sidebar-dot"></div>
-            <span class="sidebar-label">Abstract</span>
+            <span class="sidebar-label">Motivation</span>
         </a>
         <a href="#pipeline" class="sidebar-item">
             <div class="sidebar-dot"></div>
             <span class="sidebar-label">Pipeline</span>
         </a>
-        <a href="#qual-results" class="sidebar-item">
+        <a href="#dataset" class="sidebar-item">
+            <div class="sidebar-dot"></div>
+            <span class="sidebar-label">Dataset</span>
+        </a>
+        <a href="#results" class="sidebar-item">
             <div class="sidebar-dot"></div>
             <span class="sidebar-label">Results</span>
         </a>
-        <a href="#ablation-study" class="sidebar-item">
+        <a href="#ablation" class="sidebar-item">
             <div class="sidebar-dot"></div>
-            <span class="sidebar-label">Ablation Study</span>
+            <span class="sidebar-label">Ablation</span>
+        </a>
+        <a href="#abstract" class="sidebar-item">
+            <div class="sidebar-dot"></div>
+            <span class="sidebar-label">Abstract</span>
         </a>
         <a href="#citation" class="sidebar-item">
             <div class="sidebar-dot"></div>
@@ -67,27 +479,24 @@
         </a>
     </div>
 
-    <!-- Hero Section -->
+    <!-- Hero -->
     <section id="tldr" class="hero-section">
         <div class="hero-container">
+            <p class="hero-status">CVPR 2026</p>
             <h1 class="hero-title">
                 <span class="gradient-text">AnthroTAP</span>:<br>
                 <span class="hero-subtitle">Learning Point Tracking with Real-World Motion</span>
             </h1>
 
-            <!-- Status -->
-            <p class="hero-status">CVPR 2026</p>
-
-            <!-- Authors -->
             <div class="hero-authors">
-                <span><a href="https://sites.google.com/view/ines-hyeonsu-kim/home" target="_blank" rel="noopener noreferrer">Inès Hyeonsu Kim</a><sup>1,3*</sup> &nbsp;</span>
-                <span><a href="https://sites.google.com/view/seokjucho/home" target="_blank" rel="noopener noreferrer">Seokju Cho</a><sup>1*</sup> &nbsp;</span>
-                <span><a href="https://jahyeok-koo.github.io/" target="_blank" rel="noopener noreferrer">Jahyeok Koo</a><sup>1</sup> &nbsp;</span>
+                <span><a href="https://sites.google.com/view/ines-hyeonsu-kim/home" target="_blank" rel="noopener noreferrer">Inès Hyeonsu Kim</a><sup>1,3*</sup></span>
+                <span><a href="https://sites.google.com/view/seokjucho/home" target="_blank" rel="noopener noreferrer">Seokju Cho</a><sup>1*</sup></span>
+                <span><a href="https://jahyeok-koo.github.io/" target="_blank" rel="noopener noreferrer">Jahyeok Koo</a><sup>1</sup></span>
                 <span><a href="https://junghyun-james-park.github.io/" target="_blank" rel="noopener noreferrer">Junghyun Park</a><sup>1</sup></span>
-                <div style="width: 100%;"></div>
-                <span><a href="https://gabriel-huang.github.io" target="_blank" rel="noopener noreferrer">Jiahui Huang</a><sup>2</sup> &nbsp;</span>
-                <span><a href="https://web.eecs.umich.edu/~honglak/" target="_blank" rel="noopener noreferrer">Honglak Lee</a><sup>34</sup> &nbsp;</span>
-                <span><a href="https://joonyoung-cv.github.io" target="_blank" rel="noopener noreferrer">Joon-Young Lee</a><sup>2</sup> &nbsp;</span>
+                <div style="width:100%"></div>
+                <span><a href="https://gabriel-huang.github.io" target="_blank" rel="noopener noreferrer">Jiahui Huang</a><sup>2</sup></span>
+                <span><a href="https://web.eecs.umich.edu/~honglak/" target="_blank" rel="noopener noreferrer">Honglak Lee</a><sup>3,4</sup></span>
+                <span><a href="https://joonyoung-cv.github.io" target="_blank" rel="noopener noreferrer">Joon-Young Lee</a><sup>2</sup></span>
                 <span><a href="https://cvlab.kaist.ac.kr/" target="_blank" rel="noopener noreferrer">Seungryong Kim</a><sup>1</sup></span>
             </div>
 
@@ -97,12 +506,10 @@
                 <span><sup>3</sup>University of Michigan</span>
                 <span><sup>4</sup>LG AI Research</span>
             </div>
-
             <div class="hero-notes">
                 <span>*: Equal contribution</span>
             </div>
 
-            <!-- Link Buttons -->
             <div class="hero-buttons">
                 <a href="https://arxiv.org/abs/2507.06233" class="btn" target="_blank" rel="noopener noreferrer">
                     <i class="ai ai-arxiv"></i> arXiv
@@ -110,8 +517,11 @@
                 <a href="https://github.com/cvlab-kaist/AnthroTAP" class="btn btn-outline" target="_blank" rel="noopener">
                     <i class="fa-brands fa-github"></i> Code & Weights
                 </a>
-                <a href="" class="btn btn-outline" target="_blank" rel="noopener noreferrer">
-                    <i class="fa-solid fa-database"></i> Data (comming soon)
+                <a href="" class="btn btn-outline disabled" target="_blank" rel="noopener noreferrer">
+                    <i class="fa-solid fa-database"></i> Data (coming soon)
+                </a>
+                <a href="AnthroTAP_poster.pdf" class="btn btn-outline" target="_blank" rel="noopener noreferrer">
+                    <i class="fa-solid fa-thumbtack"></i> Poster
                 </a>
                 <a href="#citation" class="btn btn-outline">
                     <i class="fa-solid fa-quote-right"></i> BibTeX
@@ -119,164 +529,144 @@
             </div>
         </div>
 
-        <!-- Hero Teaser Video Carousel -->
+        <!-- Teaser Carousel -->
         <div class="teaser-container">
             <div class="video-carousel" id="teaser-carousel">
                 <div class="carousel-track">
                     <div class="carousel-item">
                         <video class="hero-video" autoplay loop muted playsinline>
-                            <source src="video/0_300.mp4" type="video/mp4">
+                            <source src="videos/0_300.mp4" type="video/mp4">
                         </video>
                     </div>
                     <div class="carousel-item">
                         <video class="hero-video" autoplay loop muted playsinline>
-                            <source src="video/1_300.mp4" type="video/mp4">
+                            <source src="videos/1_300.mp4" type="video/mp4">
                         </video>
                     </div>
                     <div class="carousel-item">
                         <video class="hero-video" autoplay loop muted playsinline>
-                            <source src="video/4_300.mp4" type="video/mp4">
-                        </video>
-                    </div>
-                    <!-- <div class="carousel-item">
-                        <video class="hero-video" autoplay loop muted playsinline>
-                            <source src="video/26_300.mp4" type="video/mp4">
-                        </video>
-                    </div> -->
-                    <div class="carousel-item">
-                        <video class="hero-video" loop muted playsinline preload="none">
-                            <source src="video/31_300.mp4" type="video/mp4">
+                            <source src="videos/4_300.mp4" type="video/mp4">
                         </video>
                     </div>
                     <div class="carousel-item">
                         <video class="hero-video" loop muted playsinline preload="none">
-                            <source src="video/43_300.mp4" type="video/mp4">                            
+                            <source src="videos/31_300.mp4" type="video/mp4">
                         </video>
                     </div>
                     <div class="carousel-item">
                         <video class="hero-video" loop muted playsinline preload="none">
-                            <source src="video/49_300.mp4" type="video/mp4">                            
+                            <source src="videos/43_300.mp4" type="video/mp4">
                         </video>
                     </div>
                     <div class="carousel-item">
                         <video class="hero-video" loop muted playsinline preload="none">
-                            <source src="video/51_300.mp4" type="video/mp4">                            
+                            <source src="videos/49_300.mp4" type="video/mp4">
                         </video>
                     </div>
                     <div class="carousel-item">
                         <video class="hero-video" loop muted playsinline preload="none">
-                            <source src="video/212_300.mp4" type="video/mp4">                            
+                            <source src="videos/51_300.mp4" type="video/mp4">
                         </video>
                     </div>
                     <div class="carousel-item">
                         <video class="hero-video" loop muted playsinline preload="none">
-                            <source src="video/267_241.mp4" type="video/mp4">                            
-                        </video>
-                    </div>
-                    <!-- <div class="carousel-item">
-                        <video class="hero-video" loop muted playsinline preload="none">
-                            <source src="video/368_300.mp4" type="video/mp4">                            
-                        </video>
-                    </div> -->
-                    <div class="carousel-item">
-                        <video class="hero-video" loop muted playsinline preload="none">
-                            <source src="video/563_300.mp4" type="video/mp4">                            
+                            <source src="videos/212_300.mp4" type="video/mp4">
                         </video>
                     </div>
                     <div class="carousel-item">
                         <video class="hero-video" loop muted playsinline preload="none">
-                            <source src="video/567_300.mp4" type="video/mp4">                            
+                            <source src="videos/563_300.mp4" type="video/mp4">
                         </video>
                     </div>
                     <div class="carousel-item">
                         <video class="hero-video" loop muted playsinline preload="none">
-                            <source src="video/704_300.mp4" type="video/mp4">                            
+                            <source src="videos/704_300.mp4" type="video/mp4">
                         </video>
                     </div>
-                    <!-- <div class="carousel-item">
+                    <div class="carousel-item">
                         <video class="hero-video" loop muted playsinline preload="none">
-                            <source src="video/710_300.mp4" type="video/mp4">                            
-                        </video>
-                    </div> -->
-                    <div class="carousel-item">
-                        <video class="hero-video" autoplay loop muted playsinline>
-                            <source src="video/731_300.mp4" type="video/mp4">                            
+                            <source src="videos/731_300.mp4" type="video/mp4">
                         </video>
                     </div>
                     <div class="carousel-item">
-                        <video class="hero-video" autoplay loop muted playsinline>
-                            <source src="video/751_251.mp4" type="video/mp4">                            
+                        <video class="hero-video" loop muted playsinline preload="none">
+                            <source src="videos/751_251.mp4" type="video/mp4">
                         </video>
                     </div>
-                    <!-- <div class="carousel-item">
-                        <video class="hero-video" autoplay loop muted playsinline>
-                            <source src="video/880_300.mp4" type="video/mp4">                            
-                        </video>
-                    </div> -->
                 </div>
                 <button class="carousel-btn carousel-prev" aria-label="Previous">&#8249;</button>
                 <button class="carousel-btn carousel-next" aria-label="Next">&#8250;</button>
             </div>
-            <div class="carousel-dots">
-                <span class="carousel-dot active"></span>
-                <span class="carousel-dot"></span>
-                <span class="carousel-dot"></span>
-                <span class="carousel-dot"></span>
-                <span class="carousel-dot"></span>
-                <span class="carousel-dot"></span>
-                <span class="carousel-dot"></span>
-                <span class="carousel-dot"></span>
-                <span class="carousel-dot"></span>
-                <span class="carousel-dot"></span>
-                <span class="carousel-dot"></span>
-                <span class="carousel-dot"></span>
-                <span class="carousel-dot"></span>
-                <span class="carousel-dot"></span>
-            </div>
+            <div class="carousel-dots" id="teaser-dots"></div>
+            <span class="video-caption" style="margin-top:0.5rem;">Pseudo-labeled trajectories extracted using the AnthroTAP pipeline on videos from DanceTrack dataset</span>
         </div>
 
-        <!-- TL;DR Box -->
-        <div class="teaser-container">
+        <!-- TL;DR -->
+        <div class="teaser-container" style="margin-top:2rem;">
             <div class="tldr-box">
                 <div class="tldr-content">
                     <span class="tldr-label">TL;DR</span>
                     <p class="tldr-text">
-                        <span class="tldr-highlight">AnthroTAP</span> generates highly complex pseudo-labeled data for point tracking
-                        by leveraging the inherent complexities of human motion captured in videos.
+                        What if tracking any point in a video didn't require millions of labeled examples, but just people dancing?
+                        We built <span class="tldr-highlight">AnthroTAP, a pipeline that distills rich supervision from real human motion videos</span> using 3D body mesh fitting.
+                        Trained on just 1,400 dance videos, our model outperforms methods using 10,000x more data, showing that 
+                        <span class="tldr-highlight">structured human movement offers a scalable and effective source of real-world supervision for point tracking</span>.
                     </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stat Cards -->
+        <div class="teaser-container" style="margin-top:1.5rem;">
+            <div class="stat-cards" style="max-width:60rem; margin:0 auto;">
+                <div class="stat-card">
+                    <div class="stat-number">11×</div>
+                    <div class="stat-label">fewer training videos<br>than CoTracker3</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">10,000×</div>
+                    <div class="stat-label">fewer training videos<br>than BootsTAPIR</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">1 day</div>
+                    <div class="stat-label">of training on<br>4 NVIDIA A6000 GPUs</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Abstract -->
-    <section id="abstract" class="section alt-bg">
+    <!-- Motivation -->
+    <section id="motivation" class="section alt-bg">
         <div class="container">
-            <h2 class="section-title">Abstract</h2>
-            <div class="abstract-text">
-                <p>
-                    Human motion, with its inherent complexities, such as non-rigid deformations,
-                    articulated movements, clothing distortions, and frequent occlusions caused by
-                    limbs or other individuals, provides a rich and challenging source of supervision that
-                    is crucial for training robust and generalizable point trackers. Despite the suitability
-                    of human motion, acquiring extensive training data for point tracking remains
-                    difficult due to laborious manual annotation. 
-                </p>
-                <p>
-                    Our proposed pipeline, <b>AnthroTAP</b>,
-                    addresses this by proposing an automated pipeline to generate pseudo-labeled
-                    training data, leveraging the Skinned Multi-Person Linear (SMPL) model. We
-                    first fit the SMPL model to detected humans in video frames, project the resulting
-                    3D mesh vertices onto 2D image planes to generate pseudo-trajectories, handle
-                    occlusions using ray-casting, and filter out unreliable tracks based on optical flow
-                    consistency. 
-                </p>
-                <p>
-                    A point tracking model trained on AnthroTAP annotated dataset
-                    achieves state-of-the-art performance on the TAP-Vid benchmark, surpassing other
-                    models trained on real videos while using 10,000x less data and only 1 day in 4
-                    GPUs, compared to 256 GPUs used in recent state-of-the-art.
-                </p>
+            <h2 class="section-title">Why Human Motion?</h2>
+
+            <div class="motivation-grid">
+                <div class="motivation-card problem">
+                    <h4><i class="fa-solid fa-circle-xmark" style="margin-right:0.4rem;"></i>The Data Problem</h4>
+                    <ul>
+                        <li><span>Real-world annotation requires tracking hundreds of points across frames, which is prohibitively expensive</span></li>
+                        <li><span>Synthetic datasets (Kubric, PointOdyssey) miss real-world visual complexity: motion blur, lighting, reflections</span></li>
+                        <li><span>Self-training methods need 15M+ real videos and still suffer from weak supervision signals</span></li>
+                    </ul>
+                </div>
+                <div class="motivation-card solution">
+                    <h4><i class="fa-solid fa-circle-check" style="margin-right:0.4rem;"></i>Our Insight</h4>
+                    <ul>
+                        <li><span>Human motion is a <em>free</em> source of complex, structured supervision already captured in millions of videos</span></li>
+                        <li><span>Non-rigid deformations, articulated joints, and frequent occlusions: exactly what trackers need to learn</span></li>
+                        <li><span>3D mesh models (SMPL) let us extract precise trajectories automatically, without any manual labeling</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="insight-box">
+                <div class="insight-icon">💡</div>
+                <div class="insight-text">
+                    <strong>Key insight:</strong> Human dance videos freely available online are inherently annotated by
+                    the laws of physics: every person in every frame follows a consistent 3D trajectory.
+                    We just need to <strong>recover and project that 3D structure</strong> to obtain high-quality
+                    pseudo-labels at scale.
+                </div>
             </div>
         </div>
     </section>
@@ -286,31 +676,112 @@
         <div class="container">
             <h2 class="section-title">Pipeline</h2>
             <p>
-                <strong>AnthroTAP</strong> extract human meshes using an off-the-shelf human mesh recovery model, and track points by projecting the mesh vertices.
-                Point visibility is determined by using ray-casting.
-                In parallel, we extract optical flow and retain only reliable flow using forward-backward consistency.
-                Finally, to enhance pseudo-label reliability, trajectories are filtered by checking the consistency between the optical flow and the trajectories generated from the human mesh.
+                <strong>AnthroTAP</strong> is an automated pseudo-labeling pipeline that distills the rich supervision signal
+                in human motion videos into 2D point tracking data. By fitting SMPL models to detected people,
+                projecting 3D mesh vertices onto the image plane, and resolving occlusions via ray-casting,
+                it generates trajectories with accurate occlusion labels, entirely without manual annotation.
             </p>
+
             <div class="figure-container">
-                <img src="assets/overall-pipeline.png" alt="AnthroTAP overall pipeline" style="max-width: 85%; margin: 0 auto;">
+                <img src="images/overall-pipeline.png" alt="AnthroTAP overall pipeline" style="max-width:90%; margin:0 auto;">
+                <span class="figure-caption">AnthroTAP pipeline: human mesh recovery and vertex projection form the core pseudo-labeling process, with ray-casting for occlusion modeling.</span>
             </div>
 
-            <!-- Optical-flow based trajectory filtering -->
-            <!-- <h3 class="subsection-title">Optical-flow based trajectory filtering</h3>
-            <p>
-                <strong>blabla</strong>
-            </p> -->
+            <!-- Core pipeline steps -->
+            <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:1rem; margin-top:1.5rem;">
+                <div style="background:#f5f3ff; border-radius:10px; padding:1.2rem; border:1px solid #c4b5fd;">
+                    <div style="font-weight:700; color:#7c3aed; margin-bottom:0.4rem;">① Human Mesh Recovery</div>
+                    <p style="font-size:0.9rem; margin:0; line-height:1.5;">TokenHMR fits SMPL 3D body meshes to every person detected in each frame, producing a temporally consistent 3D mesh with N<sub>v</sub> vertices per person.</p>
+                </div>
+                <div style="background:#f5f3ff; border-radius:10px; padding:1.2rem; border:1px solid #c4b5fd;">
+                    <div style="font-weight:700; color:#7c3aed; margin-bottom:0.4rem;">② Vertex Projection</div>
+                    <p style="font-size:0.9rem; margin:0; line-height:1.5;">3D mesh vertices are projected onto the 2D image plane using known camera parameters, forming initial pseudo-trajectories 𝒳<sub>p,j</sub> across frames.</p>
+                </div>
+                <div style="background:#f5f3ff; border-radius:10px; padding:1.2rem; border:1px solid #c4b5fd;">
+                    <div style="font-weight:700; color:#7c3aed; margin-bottom:0.4rem;">③ Visibility via Ray Casting</div>
+                    <p style="font-size:0.9rem; margin:0; line-height:1.5;">A ray cast from the camera toward each 3D vertex is tested against all human mesh triangles. Points blocked before reaching the target are marked as occluded, resolving both self-occlusion and inter-person occlusion.</p>
+                </div>
+            </div>
+
+            <!-- Additional refinement step: visually distinct -->
+            <div style="margin-top:1rem; background:#fefbff; border-radius:10px; padding:1.2rem 1.5rem; border:1px dashed #c4b5fd; display:flex; gap:1.25rem; align-items:flex-start;">
+                <div style="flex-shrink:0; margin-top:0.15rem;">
+                    <span style="background:#7c3aed; color:white; font-size:0.7rem; font-weight:700; padding:0.2rem 0.6rem; border-radius:4px; letter-spacing:0.04em; white-space:nowrap;">+ Additional Refinement</span>
+                </div>
+                <div>
+                    <div style="font-weight:700; color:#7c3aed; margin-bottom:0.3rem;">Optical Flow Filtering</div>
+                    <p style="font-size:0.9rem; margin:0; line-height:1.5; color:var(--color-text-main);">
+                        HMR-predicted displacements are compared against optical flow at each frame. Trajectory segments where the two diverge are discarded before training, catching occlusions from scene elements (e.g., furniture, background objects) outside the scope of the SMPL model.
+                    </p>
+                </div>
+            </div>
         </div>
     </section>
 
-    <!-- Qualitative Results -->
-    <section id="qual-results" class="section">
+    <!-- Dataset -->
+    <section id="dataset" class="section alt-bg">
         <div class="container">
-            <h2 class="section-title">Qualitative Results</h2>
+            <h2 class="section-title">Dataset: Anthro-LD</h2>
             <p>
-                Compared to previous state-of-the-art methods, <strong>Anthro-LocoTrack</strong>, LocoTrack-base model
-                trained with the dataset generated by our pipeline, consistently demonstrates strong performance
-                on highly deformable objects and severe occlusions.
+                We apply AnthroTAP to <strong>1.4K videos</strong> from the Let's Dance dataset,
+                spanning diverse dance styles from solo performances to complex multi-person scenes.
+                Unlike competing approaches, <strong>our training data is entirely non-proprietary</strong>.
+            </p>
+
+            <h3 class="subsection-title">Trajectory Complexity</h3>
+            <p>
+                We measure complexity as the mean angular acceleration of trajectories, measuring how sharply and 
+                frequently a trajectory changes direction over all contiguous visible segments. 
+                Anthro-LD achieves the highest complexity by a large margin, surpassing even synthetic datasets specifically designed for diversity.
+            </p>
+
+            <div class="complexity-bars">
+                <div class="bar-row">
+                    <div class="bar-label">Kubric<span class="data-type">Synthetic</span></div>
+                    <div class="bar-track">
+                        <div class="bar-fill other" style="width:14.2%;"></div>
+                    </div>
+                    <span class="bar-value">0.18</span>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-label">DriveTrack<span class="data-type">Real</span></div>
+                    <div class="bar-track">
+                        <div class="bar-fill other" style="width:35.2%;"></div>
+                    </div>
+                    <span class="bar-value">0.44</span>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-label">PointOdyssey<span class="data-type">Synthetic</span></div>
+                    <div class="bar-track">
+                        <div class="bar-fill other" style="width:41.8%;"></div>
+                    </div>
+                    <span class="bar-value">0.52</span>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-label" style="color:#7c3aed; font-weight:700;">Anthro-LD (Ours)<span class="data-type" style="color:#8b5cf6;">Real</span></div>
+                    <div class="bar-track">
+                        <div class="bar-fill ours" style="width:100%;"></div>
+                    </div>
+                    <span class="bar-value" style="color:#7c3aed; font-weight:700;">1.25</span>
+                </div>
+            </div>
+
+            <p style="font-size:0.9rem; color:var(--color-text-muted); margin-top:0;">
+                Trajectory complexity (mean angular acceleration ↑). Anthro-LD is <strong style="color:#7c3aed;">3× more complex</strong> than the next real-world dataset (DriveTrack).
+            </p>
+        </div>
+    </section>
+
+    <!-- Results -->
+    <section id="results" class="section">
+        <div class="container">
+            <h2 class="section-title">Results</h2>
+
+            <!-- Qualitative -->
+            <h3 class="subsection-title">Qualitative Comparison</h3>
+            <p>
+                Compared to CoTracker3 and BootsTAPIR, <strong>Anthro-LocoTrack</strong> consistently
+                demonstrates stronger tracking on highly deformable objects and severe occlusions.
             </p>
             <div class="qual-carousel-wrapper">
                 <table class="qual-header-table">
@@ -320,30 +791,21 @@
                         <td>Anthro-LocoTrack (Ours)</td>
                     </tr>
                 </table>
-                <div id="carousel-qual" class="result-carousel">
-                    <!-- Injected by JS -->
-                </div>
+                <div id="carousel-qual" class="result-carousel"></div>
             </div>
-        </div>
-    </section>
 
-    <!-- Quantitative Results -->
-    <section id="quan-results" class="section">
-        <div class="container">
-            <h2 class="section-title">Quantitative Results</h2>
+            <!-- Quantitative -->
+            <h3 class="subsection-title" style="margin-top:3rem;">Quantitative Results on TAP-Vid &amp; RoboTAP</h3>
             <p>
-                LocoTrack-B, trained with our approach, shows a significant performance improvement across all metrics
-                and datasets on <strong>TAP-Vid benchmark</strong> and <strong>RoboTAP</strong>, even with 11x smaller training dataset
-                than CoTracker3 in terms of the number of videos, and 1,000x smaller dataset used in BootsTAPIR
-                in terms of the number of training frames.
-                
-                Furthermore, in terms of position accuracy (\(< δ_{avg}^x \)), our model achieves the best performance on every dataset.
+                Both LocoTrack and TAPNext trained with our approach show significant improvements across all metrics
+                and datasets. We use <strong>11× fewer videos</strong> than CoTracker3 and
+                <strong>1,000× fewer training frames</strong> than BootsTAPIR.
             </p>
+
             <div class="quan-table-wrapper">
                 <table class="results-table">
                     <colgroup>
-                        <col style="width:13%">
-                        <col style="width:9%">
+                        <col style="width:13%"><col style="width:9%">
                     </colgroup>
                     <thead>
                         <tr>
@@ -355,122 +817,105 @@
                             <th colspan="3"><strong>RoboTAP First</strong></th>
                         </tr>
                         <tr>
-                            <th>AJ&uarr;</th><th>&lt;&delta;<sup>x</sup><sub>avg</sub>&uarr;</th><th>OA&uarr;</th>
-                            <th>AJ&uarr;</th><th>&lt;&delta;<sup>x</sup><sub>avg</sub>&uarr;</th><th>OA&uarr;</th>
-                            <th>AJ&uarr;</th><th>&lt;&delta;<sup>x</sup><sub>avg</sub>&uarr;</th><th>OA&uarr;</th>
-                            <th>AJ&uarr;</th><th>&lt;&delta;<sup>x</sup><sub>avg</sub>&uarr;</th><th>OA&uarr;</th>
+                            <th>AJ↑</th><th>&lt;δ<sup>x</sup><sub>avg</sub>↑</th><th>OA↑</th>
+                            <th>AJ↑</th><th>&lt;δ<sup>x</sup><sub>avg</sub>↑</th><th>OA↑</th>
+                            <th>AJ↑</th><th>&lt;δ<sup>x</sup><sub>avg</sub>↑</th><th>OA↑</th>
+                            <th>AJ↑</th><th>&lt;δ<sup>x</sup><sub>avg</sub>↑</th><th>OA↑</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="section-header-row"><td colspan="14">Models evaluated at 256&times;256 resolution</td></tr>
+                        <tr class="section-header-row"><td colspan="14">Models evaluated at 256×256 resolution</td></tr>
                         <tr><td>OmniMotion</td><td>-</td><td>-</td><td>-</td><td>-</td><td>51.7</td><td>67.5</td><td>85.3</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
                         <tr><td>Dino-Tracker</td><td>-</td><td>-</td><td>-</td><td>-</td><td>62.3</td><td>78.2</td><td>87.5</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
-                        <tr class="separator-row"><td colspan="14"></td></tr>
+                        <tr class="separator-row"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
                         <tr><td>TAPNet</td><td>Kub</td><td>33.0</td><td>48.6</td><td>78.8</td><td>38.4</td><td>53.1</td><td>82.3</td><td>38.5</td><td>54.4</td><td>80.6</td><td>-</td><td>-</td><td>-</td></tr>
                         <tr><td>TAPIR</td><td>Kub</td><td>58.5</td><td>70.0</td><td>86.5</td><td>61.3</td><td>73.6</td><td>88.8</td><td>49.6</td><td>64.2</td><td>85.0</td><td>59.6</td><td>73.4</td><td>87.0</td></tr>
                         <tr><td>Online TAPIR</td><td>Kub</td><td>56.2</td><td>70.0</td><td>86.5</td><td>-</td><td>-</td><td>-</td><td>51.5</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
                         <tr><td>TAPTR</td><td>Kub</td><td>63.0</td><td>76.1</td><td><u>91.1</u></td><td>66.3</td><td>79.2</td><td><u>91.0</u></td><td>49.0</td><td>64.4</td><td>85.2</td><td>60.1</td><td>75.3</td><td>86.9</td></tr>
-                        <tr><td>TAPTRv2</td><td>Kub</td><td><u>63.5</u></td><td>75.9</td><td><strong>91.4</strong></td><td>66.4</td><td>78.8</td><td><strong>91.3</strong></td><td>49.7</td><td>64.2</td><td>85.7</td><td>-</td><td>-</td><td>-</td></tr>
+                        <tr><td>TAPTRv2</td><td>Kub</td><td>63.5</td><td>75.9</td><td><u>91.4</u></td><td>66.4</td><td>78.8</td><td>91.3</td><td>49.7</td><td>64.2</td><td>85.7</td><td>-</td><td>-</td><td>-</td></tr>
                         <tr><td>TAPTRv3</td><td>Kub</td><td>63.2</td><td><u>76.7</u></td><td>91.0</td><td>-</td><td>-</td><td>-</td><td><u>54.5</u></td><td><u>67.5</u></td><td><strong>88.2</strong></td><td>-</td><td>-</td><td>-</td></tr>
                         <tr><td>BootsTAPIR</td><td>Kub+15M</td><td>61.4</td><td>74.0</td><td>88.4</td><td>66.2</td><td>78.5</td><td>90.7</td><td><strong>54.6</strong></td><td><strong>68.4</strong></td><td><u>86.5</u></td><td><strong>64.9</strong></td><td><strong>80.1</strong></td><td>86.3</td></tr>
-                        <tr class="separator-row"><td colspan="14"></td></tr>
-                        <tr><td>LocoTrack</td><td>Kub</td><td>63.0</td><td>75.3</td><td>87.2</td><td><u>67.8</u></td><td><u>79.6</u></td><td>89.9</td><td>52.9</td><td>66.8</td><td>85.3</td><td>62.3</td><td>76.2</td><td><u>87.1</u></td></tr>
-                        <tr class="highlight-row"><td><strong>Anthro-LocoTrack (Ours)</strong></td><td>Kub+1.4K</td><td><strong>64.8</strong></td><td><strong>77.3</strong></td><td>89.1</td><td><strong>69.0</strong></td><td><strong>81.0</strong></td><td>90.8</td><td>53.9</td><td><strong>68.4</strong></td><td>86.4</td><td><u>64.7</u></td><td><u>79.2</u></td><td><strong>88.4</strong></td></tr>
+                        <tr class="separator-row"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                        <tr><td>LocoTrack</td><td>Kub</td><td>63.0</td><td>75.3</td><td>87.2</td><td><u>67.8</u></td><td><u>79.6</u></td><td>89.9</td><td>52.9</td><td>66.8</td><td>85.3</td><td>62.3</td><td>76.2</td><td>87.1</td></tr>
+                        <tr class="highlight-row"><td><strong>Anthro-LocoTrack (Ours)</strong></td><td>Kub+1.4K</td><td>64.8</td><td>77.3</td><td>89.1</td><td><u>69.0</u></td><td>81.0</td><td>90.8</td><td>53.9</td><td><strong>68.4</strong></td><td>86.4</td><td><u>64.7</u></td><td><u>79.2</u></td><td>88.4</td></tr>
                         <tr class="improvement-row"><td colspan="2" style="text-align:center;">Improvement over baseline</td><td>+1.8</td><td>+2.0</td><td>+1.9</td><td>+1.2</td><td>+1.4</td><td>+0.9</td><td>+1.0</td><td>+1.6</td><td>+1.1</td><td>+2.4</td><td>+3.0</td><td>+1.3</td></tr>
+                        <tr class="separator-row"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                        <tr><td>TAPNext</td><td>Kub</td><td>62.4</td><td>76.6</td><td>90.5</td><td>65.4</td><td>79.7</td><td>88.9</td><td>-</td><td>-</td><td>-</td><td>59.8</td><td>73.1</td><td>88.1</td></tr>
+                        <tr><td>BootsTAPNext</td><td>Kub+15M</td><td><u>65.2</u></td><td><u>78.5</u></td><td>91.2</td><td>68.9</td><td><u>82.4</u></td><td><u>91.6</u></td><td>-</td><td>-</td><td>-</td><td>64.1</td><td>75.1</td><td><u>88.8</u></td></tr>
+                        <tr class="highlight-row"><td><strong>Anthro-TAPNext (Ours)</strong></td><td>Kub+1.4K</td><td><strong>66.1</strong></td><td><strong>79.3</strong></td><td><strong>91.7</strong></td><td><strong>71.4</strong></td><td><strong>83.5</strong></td><td><strong>92.4</strong></td><td>-</td><td>-</td><td>-</td><td>63.4</td><td>76.3</td><td><strong>90.2</strong></td></tr>
+                        <tr class="improvement-row"><td colspan="2" style="text-align:center;">Improvement over baseline</td><td>+3.7</td><td>+2.7</td><td>+1.2</td><td>+6.0</td><td>+3.8</td><td>+3.5</td><td>-</td><td>-</td><td>-</td><td>+3.6</td><td>+3.2</td><td>+2.1</td></tr>
 
-                        <tr class="section-header-row"><td colspan="14">Models evaluated at 384&times;512 resolution</td></tr>
+                        <tr class="section-header-row double-top"><td colspan="14">Models evaluated at 384×512 resolution</td></tr>
                         <tr><td>PIPs</td><td>FT</td><td>42.2</td><td>64.8</td><td>77.7</td><td>52.4</td><td>70.0</td><td>83.6</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
                         <tr><td>CoTracker2</td><td>Kub</td><td>62.2</td><td>75.7</td><td>89.3</td><td>65.9</td><td>79.4</td><td><u>89.9</u></td><td>48.8</td><td>64.5</td><td>85.8</td><td>-</td><td>-</td><td>-</td></tr>
                         <tr><td>Track-On</td><td>Kub</td><td><u>65.0</u></td><td><u>78.0</u></td><td><u>90.8</u></td><td>-</td><td>-</td><td>-</td><td>53.9</td><td>67.3</td><td><u>87.8</u></td><td>-</td><td>-</td><td>-</td></tr>
                         <tr><td>CoTracker3 (online)</td><td>Kub64+15K</td><td>64.4</td><td>76.9</td><td><strong>91.2</strong></td><td>-</td><td>-</td><td>-</td><td>54.7</td><td>67.8</td><td>87.4</td><td>-</td><td>-</td><td>-</td></tr>
                         <tr><td>CoTracker3 (offline)</td><td>Kub64+15K</td><td>63.8</td><td>76.3</td><td>90.2</td><td>-</td><td>-</td><td>-</td><td><strong>55.8</strong></td><td><u>68.5</u></td><td><strong>88.3</strong></td><td>-</td><td>-</td><td>-</td></tr>
-                        <tr class="separator-row"><td colspan="14"></td></tr>
+                        <tr class="separator-row"><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
                         <tr><td>LocoTrack</td><td>Kub</td><td>64.8</td><td>77.4</td><td>86.2</td><td><u>69.4</u></td><td><u>81.3</u></td><td>88.6</td><td>52.3</td><td>66.4</td><td>82.1</td><td>-</td><td>-</td><td>-</td></tr>
                         <tr class="highlight-row"><td><strong>Anthro-LocoTrack (Ours)</strong></td><td>Kub+1.4K</td><td><strong>65.9</strong></td><td><strong>78.9</strong></td><td>87.3</td><td><strong>71.1</strong></td><td><strong>82.9</strong></td><td><strong>90.3</strong></td><td><u>54.8</u></td><td><strong>68.6</strong></td><td>85.3</td><td>-</td><td>-</td><td>-</td></tr>
                         <tr class="improvement-row"><td colspan="2" style="text-align:center;">Improvement over baseline</td><td>+1.1</td><td>+1.5</td><td>+1.1</td><td>+1.7</td><td>+1.6</td><td>+1.7</td><td>+2.5</td><td>+2.2</td><td>+3.2</td><td>-</td><td>-</td><td>-</td></tr>
                     </tbody>
                     <caption class="quan-table-caption">
                         Quantitative results on <strong>TAP-Vid benchmark</strong> and <strong>RoboTAP</strong>.
+                        Kub = Kubric, Kub64 = Kubric64 (dataset rendered in CoTracker3). Best in <strong>bold</strong>, second best <u>underlined</u>.
                     </caption>
                 </table>
             </div>
-            <!-- <div class="two-col" style="gap: 1.5rem; align-items: center;">
-                <div class="two-col-item">
-                    <div class="figure-container">
-                        <img src="assets/vis_attn.png" alt="Cross-temporal pairing attention visualization">
-                        <span class="figure-caption">Attention Visualization under Cross-Temporal Pairing</span>
-                    </div>
-                </div>
-                <div class="two-col-item">
-                    <div class="figure-container">
-                        <img src="assets/interp_only.png" alt="View interpolation pipeline">
-                        <span class="figure-caption">Street-View Interpolation Model</span>
-                    </div>
-                </div>
-            </div>
-            <p>
-                Without cross-temporal pairing, dynamic objects in the reference (e.g., vehicles) leak into the generated video.
-                Temporal separation forces the model to focus on persistent scene structure.
-            </p>
-            <div class="video-container" style="max-width: 85%; margin: 0 auto;">
-                <video loop muted playsinline preload="none" class="lazy-video" data-src="video/page-pairing.mp4">
-                </video>
-            </div> -->
-
-            <!-- Synthetic Data -->
-            <!-- <h3 class="subsection-title">Unreal Engine-based Synthetic Data</h3>
-            <p>
-                To complement driving-only real trajectories, we render synthetic data from CARLA simulator with three
-                trajectory types: <strong>pedestrian</strong> (sidewalks, crossings),
-                <strong>vehicle</strong> (highways, urban roads), and <strong>free-camera</strong>
-                (arbitrary collision-free paths). This diversity enables SWM to handle arbitrary camera
-                movements at inference.
-            </p>
-            <div style="display: flex; gap: 0.5rem; margin-bottom: 0.25rem;">
-                <div style="flex: 1;">
-                    <video loop muted playsinline preload="none" class="lazy-video" data-src="video/synthetic_1.mp4" style="width: 100%; border-radius: 0.5rem;">
-                    </video>
-                </div>
-                <div style="flex: 1;">
-                    <video loop muted playsinline preload="none" class="lazy-video" data-src="video/synthetic_2.mp4" style="width: 100%; border-radius: 0.5rem;">
-                    </video>
-                </div>
-                <div style="flex: 1;">
-                    <video loop muted playsinline preload="none" class="lazy-video" data-src="video/synthetic_3.mp4" style="width: 100%; border-radius: 0.5rem;">
-                    </video>
-                </div>
-            </div>
-            <span class="video-caption" style="margin-bottom: 2rem;">Examples of synthetic training data</span>
-            <p>
-                Synthetic data with diverse camera paths allows SWM to generalize beyond forward-driving trajectories,
-                as shown in the comparison below.
-            </p>
-            <div class="video-container" style="max-width: 85%; margin: 0 auto;">
-                <video loop muted playsinline preload="none" class="lazy-video" data-src="video/page-synthetic.mp4">
-                </video>
-            </div> -->
         </div>
     </section>
 
     <!-- Ablation -->
-    <section id="ablation-study" class="section">
+    <section id="ablation" class="section alt-bg">
         <div class="container">
             <h2 class="section-title">Ablation Study</h2>
-            <div id="carousel-abl" class="result-carousel">
-                <!-- Injected by JS -->
+            <div id="carousel-abl" class="result-carousel"></div>
+        </div>
+    </section>
+
+    <!-- Abstract -->
+    <section id="abstract" class="section">
+        <div class="container">
+            <h2 class="section-title">Abstract</h2>
+            <div class="abstract-text">
+                <p>
+                    Point tracking models often struggle to generalize to real-world videos because large-scale training
+                    data is predominantly synthetic, the only source currently feasible to produce at scale.
+                    Collecting real-world annotations, however, is prohibitively expensive, as it requires tracking
+                    hundreds of points across frames.
+                </p>
+                <p>
+                    We introduce <strong>AnthroTAP</strong>, an automated pipeline that generates large-scale
+                    pseudo-labeled point tracking data from real human motion videos. Leveraging the structured
+                    complexity of human movement, including non-rigid deformations, articulated motion, and frequent
+                    occlusions. AnthroTAP fits Skinned Multi-Person Linear (SMPL) models to detected humans,
+                    projects mesh vertices onto image planes, resolves occlusions via ray-casting, and filters
+                    unreliable tracks using optical flow consistency.
+                </p>
+                <p>
+                    A model trained on the AnthroTAP dataset achieves state-of-the-art performance on TAP-Vid,
+                    a challenging general-domain benchmark for tracking any point on diverse rigid and non-rigid
+                    objects (e.g., humans, animals, robots, and vehicles). Our approach outperforms recent
+                    self-training methods trained on vastly larger real datasets, while requiring only one day
+                    of training on 4 GPUs.
+                </p>
+                <p>
+                    <strong>AnthroTAP shows that structured human motion offers a scalable and effective source
+                    of real-world supervision for point tracking.</strong>
+                </p>
             </div>
         </div>
     </section>
 
-    <!-- Citation Section -->
+    <!-- Citation -->
     <section id="citation" class="citation-section">
         <div class="container">
-            <h2 class="section-title" style="font-size: 1.5rem; border: none; margin-bottom: 1rem;">Citation</h2>
+            <h2 class="section-title" style="font-size:1.5rem; border:none; margin-bottom:1rem;">Citation</h2>
             <div class="citation-block group">
                 <button onclick="copyBibtex()" class="citation-copy-btn">
                     <i class="fa-regular fa-copy"></i> Copy
                 </button>
-                <div id="bibtex-text" style="display: none;">@article{kim2025learning,
+                <div id="bibtex-text" style="display:none;">@article{kim2025learning,
   title     = {AnthroTAP: Learning Point Tracking with Real-World Motion},
   author    = {Kim, In{\`e}s Hyeonsu and Cho, Seokju and Koo, Jahyeok and Park, Junghyun and Huang, Jiahui and Lee, Honglak and Lee, Joon-Young and Kim, Seungryong},
   journal   = {arXiv preprint arXiv:2507.06233},
@@ -486,580 +931,360 @@
         </div>
     </section>
 
-    <!-- Acknowledgements -->
-    <!-- <section style="padding: 2rem 0;">
-        <div class="container">
-            <h2 style="font-size: 1.1rem; font-weight: 600; color: var(--color-text-muted); margin-bottom: 0.75rem;">Acknowledgements</h2>
-            <p style="font-size: 0.95rem; color: var(--color-text-muted); line-height: 1.6; margin: 0;">
-                We would like to sincerely thank everyone at NAVER and NAVER Cloud who contributed their time,
-                expertise, and feedback throughout this work. We are grateful to Jinbae Im, Moonbin Yim, and Bado
-                Lee for their help with data preprocessing. We also thank Jongchae Na, Hyunjoon Cho, Hochul Hwang,
-                MyoungSuk Chae, and Kwangkean Kim for their support with data processing and guidance on the use of
-                map data and metadata. Finally, we thank Jonghak Kim, Jieun Shin, and Hyeeun Shin for valuable
-                discussions and thoughtful feedback. Their support and collaboration are greatly appreciated.
-            </p>
-        </div>
-    </section> -->
-
     <!-- Footer -->
-    <footer class="footer fade-in-section is-visible">
+    <footer class="footer">
         <div class="container">
-            <p>Credit: The design of this project page is inspired by previous academic project pages, <a href="https://cvlab-kaist.github.io/CAMEO/" target="_blank">CAMEO</a> and <a href="https://seoul-world-model.github.io/" target="_blank">Seoul World Model</a>.</p>
+            <p>Credit: The design of this project page is inspired by previous academic project pages, <a href="https://cvlab-kaist.github.io/CAMEO/" target="_blank" style="color:#7c3aed;">CAMEO</a> and <a href="https://seoul-world-model.github.io/" target="_blank" style="color:#7c3aed;">Seoul World Model</a>.</p>
         </div>
     </footer>
 
-
     <script>
-        // Fade-in Animation
-        function initFadeInAnimations() {
-            const observerOptions = {
-                root: null,
-                rootMargin: '0px',
-                threshold: 0.1
-            };
-
+        // Fade-in
+        function initFadeIn() {
             const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('is-visible');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, observerOptions);
-
-            const sections = document.querySelectorAll('.section, .hero-section, .citation-section, .footer');
-            sections.forEach(section => {
-                section.classList.add('fade-in-section');
-                observer.observe(section);
+                entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('is-visible'); observer.unobserve(e.target); } });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.section, .hero-section, .citation-section, .footer').forEach(s => {
+                s.classList.add('fade-in-section');
+                observer.observe(s);
             });
         }
 
-        // Sidebar click scroll with offset
-        function initSidebarScroll() {
-            const sidebar = document.querySelector('.sidebar');
-            document.querySelectorAll('.sidebar-item').forEach(link => {
-                link.addEventListener('click', function (e) {
-                    const isTopSidebar = window.matchMedia('(max-width: 1280px)').matches;
-                    if (!isTopSidebar) return;
-
-                    e.preventDefault();
-                    const targetId = this.getAttribute('href').slice(1);
-                    const target = document.getElementById(targetId);
-                    if (!target) return;
-
-                    const sidebarHeight = sidebar.offsetHeight;
-                    const targetTop = target.getBoundingClientRect().top + window.scrollY - sidebarHeight + 20;
-                    window.scrollTo({ top: targetTop, behavior: 'smooth' });
-                });
-            });
-        }
-
-        // Scroll Spy for Sidebar
+        // Scroll spy
         function initScrollSpy() {
             const sections = document.querySelectorAll('section[id]');
-            const sidebarLinks = document.querySelectorAll('.sidebar-item');
+            const links = document.querySelectorAll('.sidebar-item');
             const sidebar = document.querySelector('.sidebar');
-
-            // sections that share a single sidebar item                                                                                 
-            const sectionAliases = {                                                                                                     
-                'quan-results': 'qual-results',                                                                                          
-            };
-
-            const observerOptions = {
-                root: null,
-                rootMargin: '-50% 0px -50% 0px',
-                threshold: 0
-            };
-
             const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const id = entry.target.getAttribute('id');
-                        const linkId = sectionAliases[id] || id;
-
-                        sidebarLinks.forEach(link => {
-                            link.classList.remove('active');
-                        });
-
-                        const activeLink = document.querySelector(`.sidebar-item[href="#${linkId}"]`);
-                        if (activeLink) {
-                            activeLink.classList.add('active');
-
-                            const linkRect = activeLink.getBoundingClientRect();
-                            const sidebarRect = sidebar.getBoundingClientRect();
-                            const relativeTop = linkRect.top - sidebarRect.top;
-                            sidebar.style.setProperty('--active-position', `${relativeTop - 32}px`);
+                entries.forEach(e => {
+                    if (e.isIntersecting) {
+                        const id = e.target.getAttribute('id');
+                        links.forEach(l => l.classList.remove('active'));
+                        const active = document.querySelector(`.sidebar-item[href="#${id}"]`);
+                        if (active) {
+                            active.classList.add('active');
+                            const rel = active.getBoundingClientRect().top - sidebar.getBoundingClientRect().top;
+                            sidebar.style.setProperty('--active-position', `${rel - 32}px`);
                         }
                     }
                 });
-            }, observerOptions);
-
-            sections.forEach(section => {
-                observer.observe(section);
-            });
+            }, { rootMargin: '-50% 0px -50% 0px' });
+            sections.forEach(s => observer.observe(s));
         }
 
-        function copyBibtex() {
-            const text = document.getElementById('bibtex-text').innerText;
-            navigator.clipboard.writeText(text).then(() => {
-                const btn = document.querySelector('.citation-copy-btn');
-                const original = btn.innerHTML;
-                btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
-                setTimeout(() => {
-                    btn.innerHTML = original;
-                }, 2000);
-            });
-        }
-
-        // Lazy Loading Videos
-        function initLazyVideos() {
-            const videos = document.querySelectorAll('video.lazy-video');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const video = entry.target;
-                        const src = video.dataset.src;
-                        if (src) {
-                            video.addEventListener('playing', function onPlaying() {
-                                video.classList.add('loaded');
-                                video.removeEventListener('playing', onPlaying);
-                            });
-                            const source = document.createElement('source');
-                            source.src = src;
-                            source.type = 'video/mp4';
-                            video.appendChild(source);
-                            video.load();
-                            if (video.dataset.playbackRate) {
-                                video.playbackRate = parseFloat(video.dataset.playbackRate);
-                            }
-                            video.play();
-                            delete video.dataset.src;
-                        }
-                        observer.unobserve(video);
-                    }
+        // Sidebar mobile scroll
+        function initSidebarScroll() {
+            document.querySelectorAll('.sidebar-item').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    if (!window.matchMedia('(max-width: 1280px)').matches) return;
+                    e.preventDefault();
+                    const target = document.getElementById(this.getAttribute('href').slice(1));
+                    if (!target) return;
+                    const offset = document.querySelector('.sidebar').offsetHeight;
+                    window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - offset + 20, behavior: 'smooth' });
                 });
-            }, {
-                rootMargin: '200px 0px'
             });
-
-            videos.forEach(video => observer.observe(video));
         }
 
-        // Teaser Carousel
+        // Teaser carousel
         function initTeaserCarousel() {
             const carousel = document.getElementById('teaser-carousel');
             if (!carousel) return;
-
             const track = carousel.querySelector('.carousel-track');
-            const dots = document.querySelectorAll('.carousel-dots .carousel-dot');
-            const prevBtn = carousel.querySelector('.carousel-prev');
-            const nextBtn = carousel.querySelector('.carousel-next');
-            const SLIDES_TO_SHOW = 2.5;
-            const MARGIN = 4; // 2px each side
-            const CLONES = 3;
-
+            const dotsContainer = document.getElementById('teaser-dots');
+            const SHOW = 2.5, MARGIN = 4, CLONES = 3;
             const originals = Array.from(track.querySelectorAll('.carousel-item'));
             const total = originals.length;
 
-            // Prepend clones of last CLONES items, append clones of first CLONES items
-            originals.slice(-CLONES).reverse().forEach(item => {
-                track.prepend(item.cloneNode(true));
-            });
-            originals.slice(0, CLONES).forEach(item => {
-                track.appendChild(item.cloneNode(true));
-            });
+            originals.slice(-CLONES).reverse().forEach(item => track.prepend(item.cloneNode(true)));
+            originals.slice(0, CLONES).forEach(item => track.appendChild(item.cloneNode(true)));
 
-            let current = CLONES; // Start at first real item
-            let cachedItemWidth = 0;
+            // Build dots
+            originals.forEach((_, i) => {
+                const dot = document.createElement('span');
+                dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+                dot.addEventListener('click', () => goTo(i + CLONES));
+                dotsContainer.appendChild(dot);
+            });
+            const dots = dotsContainer.querySelectorAll('.carousel-dot');
 
-            function updateItemWidths() {
-                const containerWidth = carousel.getBoundingClientRect().width;
-                // Each item's total space = containerWidth / SLIDES_TO_SHOW
-                // With box-sizing: border-box, minWidth = total space - margin
-                cachedItemWidth = containerWidth / SLIDES_TO_SHOW;
-                const contentWidth = cachedItemWidth - MARGIN;
+            let current = CLONES, itemWidth = 0;
+
+            function updateWidths() {
+                itemWidth = carousel.getBoundingClientRect().width / SHOW;
                 track.querySelectorAll('.carousel-item').forEach(item => {
-                    item.style.minWidth = contentWidth + 'px';
-                    item.style.maxWidth = contentWidth + 'px';
+                    item.style.minWidth = (itemWidth - MARGIN) + 'px';
+                    item.style.maxWidth = (itemWidth - MARGIN) + 'px';
                 });
             }
 
-            function setPosition(index, animate) {
+            function setPos(idx, animate) {
                 track.style.transition = animate ? 'transform 0.4s ease' : 'none';
-                track.style.transform = `translateX(-${index * cachedItemWidth}px)`;
-                if (!animate) track.offsetHeight; // force reflow
+                track.style.transform = `translateX(-${idx * itemWidth}px)`;
+                if (!animate) track.offsetHeight;
             }
 
-            function loadVisible(index) {
+            function loadVideos(idx) {
                 const all = track.querySelectorAll('.carousel-item');
-                for (let i = index; i < Math.min(index + 3, all.length); i++) {
-                    const video = all[i].querySelector('video');
-                    if (!video) continue;
-                    if (video.readyState === 0) {
-                        video.load();
-                        video.addEventListener('canplay', () => video.play().catch(() => {}), { once: true });
-                    } else {
-                        video.play().catch(() => {});
-                    }
+                for (let i = idx; i < Math.min(idx + 3, all.length); i++) {
+                    const v = all[i].querySelector('video');
+                    if (!v) continue;
+                    if (v.readyState === 0) {
+                        v.load();
+                        v.addEventListener('canplay', () => v.play().catch(() => {}), { once: true });
+                    } else { v.play().catch(() => {}); }
                 }
             }
 
-            function updateDots(index) {
-                const realIndex = (index - CLONES + total) % total;
-                dots.forEach((dot, i) => dot.classList.toggle('active', i === realIndex));
+            function updateDots(idx) {
+                const real = (idx - CLONES + total) % total;
+                dots.forEach((d, i) => d.classList.toggle('active', i === real));
             }
 
-            function goTo(index) {
-                current = index;
-                setPosition(current, true);
-                loadVisible(current);
+            function goTo(idx) {
+                current = idx;
+                setPos(current, true);
+                loadVideos(current);
                 updateDots(current);
             }
 
-            // Infinite loop: silently jump when reaching clone zone
-            function syncVideoTime(srcItem, dstItem) {
-                const src = srcItem?.querySelector('video');
-                const dst = dstItem?.querySelector('video');
-                if (src && dst && src.readyState >= 1 && dst.readyState >= 1) {
-                    if (Math.abs(src.currentTime - dst.currentTime) > 0.05) {
-                        dst.currentTime = src.currentTime;
-                    }
-                }
-            }
-
-            // Continuously keep clones in sync with originals
-            setInterval(() => {
-                const all = Array.from(track.querySelectorAll('.carousel-item'));
-                for (let i = 0; i < CLONES; i++) {
-                    // orig → prepended clone
-                    syncVideoTime(all[total + i], all[i]);
-                    // orig → appended clone
-                    syncVideoTime(all[CLONES + i], all[CLONES + total + i]);
-                }
-            }, 200);
-
             track.addEventListener('transitionend', () => {
-                const all = Array.from(track.querySelectorAll('.carousel-item'));
-                if (current < CLONES) {
-                    current += total;
-                    setPosition(current, false);
-                } else if (current >= CLONES + total) {
-                    current -= total;
-                    setPosition(current, false);
-                }
+                if (current < CLONES) { current += total; setPos(current, false); }
+                else if (current >= CLONES + total) { current -= total; setPos(current, false); }
             });
 
-            updateItemWidths();
-            setPosition(current, false);
-            loadVisible(current);
+            updateWidths();
+            setPos(current, false);
+            loadVideos(current);
 
-            prevBtn.addEventListener('click', () => goTo(current - 1));
-            nextBtn.addEventListener('click', () => goTo(current + 1));
-            dots.forEach((dot, i) => dot.addEventListener('click', () => goTo(i + CLONES)));
-
-            new ResizeObserver(() => {
-                updateItemWidths();
-                setPosition(current, false);
-            }).observe(carousel);
+            carousel.querySelector('.carousel-prev').addEventListener('click', () => goTo(current - 1));
+            carousel.querySelector('.carousel-next').addEventListener('click', () => goTo(current + 1));
+            new ResizeObserver(() => { updateWidths(); setPos(current, false); }).observe(carousel);
         }
 
-        // Generic Carousel for Ablation
+        // Generic carousel class
         class Carousel {
             constructor(containerId, data, renderItem) {
-                this.container = document.getElementById(containerId);
+                this.el = document.getElementById(containerId);
                 this.data = data;
-                this.renderItem = renderItem;
-                this.currentIndex = 0;
-                this.totalSlides = data.length;
+                this.render = renderItem;
+                this.idx = 0;
                 this.init();
                 window.addEventListener('resize', () => this.updateHeight());
-                this.container.addEventListener('load', () => this.updateHeight(), true);
             }
-
             init() {
-                this.container.innerHTML = `
+                this.el.innerHTML = `
                     <div class="carousel-viewport">
                         <div class="carousel-track">
-                            ${this.data.map(item => `
-                                <div class="carousel-slide">${this.renderItem(item)}</div>
-                            `).join('')}
+                            ${this.data.map(d => `<div class="carousel-slide">${this.render(d)}</div>`).join('')}
                         </div>
                     </div>
                     <button class="carousel-nav-btn prev"><i class="fa-solid fa-chevron-left"></i></button>
                     <button class="carousel-nav-btn next"><i class="fa-solid fa-chevron-right"></i></button>
                     <div class="carousel-dots">
-                        ${this.data.map((_, i) => `
-                            <button class="carousel-dot ${i === 0 ? 'active' : ''}" data-index="${i}"></button>
-                        `).join('')}
-                    </div>
-                `;
-                this.track = this.container.querySelector('.carousel-track');
-                this.dots = this.container.querySelectorAll('.carousel-dots button');
-                this.container.querySelector('.carousel-nav-btn.prev').onclick = () => this.move(-1);
-                this.container.querySelector('.carousel-nav-btn.next').onclick = () => this.move(1);
-                this.dots.forEach((dot, i) => dot.onclick = () => this.goTo(i));
+                        ${this.data.map((_, i) => `<button class="carousel-dot ${i===0?'active':''}" data-index="${i}"></button>`).join('')}
+                    </div>`;
+                this.track = this.el.querySelector('.carousel-track');
+                this.dots = this.el.querySelectorAll('.carousel-dots button');
+                this.el.querySelector('.prev').onclick = () => this.move(-1);
+                this.el.querySelector('.next').onclick = () => this.move(1);
+                this.dots.forEach((d, i) => d.onclick = () => this.goTo(i));
                 setTimeout(() => { this.updateHeight(); this.syncVideos(); }, 100);
             }
-
-            move(direction) {
-                this.currentIndex = (this.currentIndex + direction + this.totalSlides) % this.totalSlides;
-                this.update();
-            }
-
-            goTo(index) {
-                this.currentIndex = index;
-                this.update();
-            }
-
-            update() {
-                this.track.style.transform = `translateX(-${this.currentIndex * 100}%)`;
-                this.dots.forEach((dot, i) => {
-                    dot.className = `carousel-dot ${i === this.currentIndex ? 'active' : ''}`;
-                });
+            move(dir) { this.goTo((this.idx + dir + this.data.length) % this.data.length); }
+            goTo(i) {
+                this.idx = i;
+                this.track.style.transform = `translateX(-${i * 100}%)`;
+                this.dots.forEach((d, j) => d.className = `carousel-dot ${j===i?'active':''}`);
                 this.updateHeight();
                 this.syncVideos();
             }
-
             syncVideos() {
-                const slides = this.container.querySelectorAll('.carousel-slide');
-                slides.forEach((slide, i) => {
-                    const video = slide.querySelector('video');
-                    if (!video) return;
-                    if (i === this.currentIndex) {
-                        if (video.dataset.src) {
-                            const source = document.createElement('source');
-                            source.src = video.dataset.src;
-                            source.type = 'video/mp4';
-                            video.appendChild(source);
-                            video.load();
-                            delete video.dataset.src;
-                            video.addEventListener('loadedmetadata', () => this.updateHeight(), { once: true });
+                this.el.querySelectorAll('.carousel-slide').forEach((slide, i) => {
+                    const v = slide.querySelector('video');
+                    if (!v) return;
+                    if (i === this.idx) {
+                        if (v.dataset.src) {
+                            const src = document.createElement('source');
+                            src.src = v.dataset.src; src.type = 'video/mp4';
+                            v.appendChild(src); v.load(); delete v.dataset.src;
+                            v.addEventListener('loadedmetadata', () => this.updateHeight(), { once: true });
                         }
-                        if (video.dataset.playbackRate) {
-                            video.playbackRate = parseFloat(video.dataset.playbackRate);
-                        }
-                        video.play();
-                    } else {
-                        video.pause();
-                    }
+                        if (v.dataset.playbackRate) v.playbackRate = parseFloat(v.dataset.playbackRate);
+                        v.play();
+                    } else { v.pause(); }
                 });
             }
-
             updateHeight() {
-                const slides = this.container.querySelectorAll('.carousel-slide');
-                if (slides[this.currentIndex]) {
-                    const height = slides[this.currentIndex].offsetHeight;
-                    this.container.querySelector('.carousel-viewport').style.height = `${height}px`;
-                }
+                const slides = this.el.querySelectorAll('.carousel-slide');
+                const vp = this.el.querySelector('.carousel-viewport');
+                if (slides[this.idx]) vp.style.height = slides[this.idx].offsetHeight + 'px';
             }
         }
 
+        // Data
         const qualData = [
-            { src: 'video/com-dog-agility_0_merged.mp4',  rate: 0.7 },
-            { src: 'video/com-dogs-scale_0_merged.mp4',   rate: 0.7 },
-            { src: 'video/com-varanus-cage_0_merged.mp4', rate: 0.7 },
-            { src: 'video/com-crossing_0_merged.mp4',     rate: 0.7 },
+            { src: 'videos/com-dog-agility_0_merged.mp4',  rate: 0.7 },
+            { src: 'videos/com-dogs-scale_0_merged.mp4',   rate: 0.7 },
+            { src: 'videos/com-varanus-cage_0_merged.mp4', rate: 0.7 },
+            { src: 'videos/com-crossing_0_merged.mp4',     rate: 0.7 },
         ];
 
-        function renderQualSlide(item) {
-            return `
-                <div class="results-slide-content">
-                    <video loop muted playsinline preload="none"
-                            class="qual-slide-video"
-                            data-src="${item.src}"
-                            data-playback-rate="${item.rate}">
-                    </video>
-                </div>
-            `;
+        function renderQual(item) {
+            return `<div class="results-slide-content">
+                <video loop muted playsinline preload="none" class="qual-slide-video"
+                    data-src="${item.src}" data-playback-rate="${item.rate}"></video>
+            </div>`;
         }
-        
-        const ablationData = [
+
+        const ablData = [
             {
                 title: 'Can Training on Human Points Generalize to Non-Human Points?',
-                desc: 'To examine whether training on human points generalize to non-human points, we grouped query points in the TAP-Vid-DAVIS dataset into human and non-human regions and compared performance. Our method shows greater improvement on non-human points.',
-                tables: `
-                    <div class="ablation-item">
-                        
-                        <table class="results-table">
-                            <thead>
-                                <tr><th>Benchmark</th><th style="text-align:left; padding-left:0.5rem;">Method</th><th>AJ&uarr;</th><th>&lt;&delta;<sup>x</sup><sub>avg</sub>&uarr;</th><th>OA&uarr;</th></tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td rowspan="2" style="vertical-align:middle;">DAVIS (Human Only)</td>
-                                    <td style="text-align:left; padding-left:0.5rem;">LocoTrack</td>
-                                    <td>50.7</td><td>42.4</td><td>57.8</td>
-                                </tr>
-                                <tr class="highlight-row">
-                                    <td><strong>Anthro-LocoTrack (Ours)</strong></td>
-                                    <td><strong>51.2</strong> <span style="color:#16a34a">(+0.5)</span></td>
-                                    <td><strong>43.3</strong> <span style="color:#16a34a">(+0.9)</span></td>
-                                    <td><strong>58.6</strong> <span style="color:#16a34a">(+0.8)</span></td>
-                                </tr>
-                                <tr class="separator-row"><td colspan="5"></td></tr>
-                                <tr>
-                                    <td rowspan="2" style="vertical-align:middle;">DAVIS (Non-Human)</td>
-                                    <td style="text-align:left; padding-left:0.5rem;">LocoTrack</td>
-                                    <td>58.8</td><td>73.1</td><td>83.9</td>
-                                </tr>
-                                <tr class="highlight-row">
-                                    <td><strong>Anthro-LocoTrack (Ours)</strong></td>
-                                    <td><strong>60.8</strong> <span style="color:#16a34a">(+2.0)</span></td>
-                                    <td><strong>75.2</strong> <span style="color:#16a34a">(+2.1)</span></td>
-                                    <td><strong>85.3</strong> <span style="color:#16a34a">(+1.4)</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                `,
+                desc: 'We group query points in TAP-Vid-DAVIS into human and non-human regions. Our method shows greater improvement on <em>non-human</em> points, demonstrating that structured human motion teaches general tracking, not just human-specific priors.',
+                tables: `<table class="results-table">
+                    <colgroup><col style="width:22%"><col style="width:28%"><col><col><col></colgroup>
+                    <thead><tr><th>Benchmark</th><th style="text-align:left;padding-left:.5rem">Method</th><th class="abl-col-sep">AJ↑</th><th>&lt;δ<sup>x</sup><sub>avg</sub>↑</th><th>OA↑</th></tr></thead>
+                    <tbody>
+                        <tr><td rowspan="2" style="vertical-align:middle">DAVIS (Human Only)</td>
+                            <td style="text-align:left;padding-left:.5rem">LocoTrack</td><td class="abl-col-sep">50.7</td><td>42.4</td><td>57.8</td></tr>
+                        <tr class="highlight-row"><td><strong>Anthro-LocoTrack</strong></td>
+                            <td class="abl-col-sep"><strong>51.2</strong> <span style="color:#7c3aed">(+0.5)</span></td>
+                            <td><strong>43.3</strong> <span style="color:#7c3aed">(+0.9)</span></td>
+                            <td><strong>58.6</strong> <span style="color:#7c3aed">(+0.8)</span></td></tr>
+                        <tr class="separator-row"><td></td><td></td><td class="abl-col-sep"></td><td></td><td></td></tr>
+                        <tr><td rowspan="2" style="vertical-align:middle">DAVIS (Non-Human)</td>
+                            <td style="text-align:left;padding-left:.5rem">LocoTrack</td><td class="abl-col-sep">58.8</td><td>73.1</td><td>83.9</td></tr>
+                        <tr class="highlight-row"><td><strong>Anthro-LocoTrack</strong></td>
+                            <td class="abl-col-sep"><strong>60.8</strong> <span style="color:#7c3aed">(+2.0)</span></td>
+                            <td><strong>75.2</strong> <span style="color:#7c3aed">(+2.1)</span></td>
+                            <td><strong>85.3</strong> <span style="color:#7c3aed">(+1.4)</span></td></tr>
+                    </tbody></table>`
             },
             {
-                title: 'Comparison to Self-Training in CoTracker3',
-                desc: 'We compare our pipeline with self-training introduced in Karaev <i>et al.</i>. <b>(I)</b> CoTracker3 model trained on Kubric. <b>(II)</b> fine-tunes the model on the Let’s Dance (LD) dataset using the self-training introduced in the paper. <b>(III)</b> trains CoTracker3 model using our pipeline. Our method shows greater performance boost than self-training introduced in CoTracker3.',
-                tables: `
-                    <div class="ablation-item">
-                        
-                        <table class="results-table">
-                            <thead>
-                                <tr>
-                                    <th rowspan="2" style="vertical-align:middle;"></th>
-                                    <th rowspan="2" style="vertical-align:middle;">Model</th>
-                                    <th rowspan="2" style="vertical-align:middle;">Train Strategy</th>
-                                    <th rowspan="2" style="vertical-align:middle;">Dataset</th>
-                                    <th colspan="3">DAVIS</th>
-                                </tr>
-                                <tr>
-                                    <th>AJ&uarr;</th>
-                                    <th>&lt;&delta;<sup>x</sup><sub>avg</sub>&uarr;</th>
-                                    <th>OA&uarr;</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><strong>(I)</strong></td>
-                                    <td>CoTracker3</td>
-                                    <td>Supervised</td>
-                                    <td>Kubric</td>
-                                    <td>63.8</td><td>76.3</td><td>90.2</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>(II)</strong></td>
-                                    <td>CoTracker3</td>
-                                    <td>Self-training</td>
-                                    <td>LD</td>
-                                    <td>64.2 <span style="color:#16a34a">(+0.4)</span></td>
-                                    <td>76.5 <span style="color:#16a34a">(+0.2)</span></td>
-                                    <td>89.6 <span style="color:#dc2626">(-0.6)</span></td>
-                                </tr>
-                                <tr class="separator-row"><td colspan="7"></td></tr>
-                                <tr class="highlight-row">
-                                    <td><strong>(III)</strong></td>
-                                    <td>CoTracker3</td>
-                                    <td><strong>AnthroTAP (Ours)</strong></td>
-                                    <td><strong>Anthro-LD</strong></td>
-                                    <td><strong>65.0</strong> <span style="color:#16a34a">(+1.2)</span></td>
-                                    <td><strong>77.3</strong> <span style="color:#16a34a">(+1.0)</span></td>
-                                    <td><strong>90.7</strong> <span style="color:#16a34a">(+0.5)</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                `,
+                title: 'Comparison with CoTracker3 Self-Training on Identical Data',
+                desc: '<strong>(I)</strong> CoTracker3 on Kubric. <strong>(II)</strong> CoTracker3 self-training on Let\'s Dance. <strong>(III)</strong> CoTracker3 + AnthroTAP pseudo-labels on Let\'s Dance. Our pipeline achieves substantially larger gains than CoTracker3\'s own self-training strategy on the same data.',
+                tables: `<table class="results-table">
+                    <colgroup><col style="width:5%"><col style="width:16%"><col style="width:17%"><col style="width:12%"><col><col><col></colgroup>
+                    <thead>
+                        <tr>
+                            <th rowspan="2" style="vertical-align:middle"></th>
+                            <th rowspan="2" style="vertical-align:middle">Model</th>
+                            <th rowspan="2" style="vertical-align:middle">Strategy</th>
+                            <th rowspan="2" style="vertical-align:middle">Dataset</th>
+                            <th colspan="3" class="abl-col-sep">DAVIS</th>
+                        </tr>
+                        <tr>
+                            <th class="abl-col-sep">AJ↑</th>
+                            <th>&lt;δ<sup>x</sup><sub>avg</sub>↑</th>
+                            <th>OA↑</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>(I)</strong></td><td>CoTracker3</td><td>Supervised</td><td>Kubric</td><td class="abl-col-sep">63.8</td><td>76.3</td><td>90.2</td></tr>
+                        <tr><td><strong>(II)</strong></td><td>CoTracker3</td><td>Self-training</td><td>LD</td>
+                            <td class="abl-col-sep">64.2 <span style="color:#7c3aed">(+0.4)</span></td>
+                            <td>76.5 <span style="color:#7c3aed">(+0.2)</span></td>
+                            <td>89.6 <span style="color:#dc2626">(-0.6)</span></td></tr>
+                        <tr class="separator-row"><td></td><td></td><td></td><td></td><td class="abl-col-sep"></td><td></td><td></td></tr>
+                        <tr class="highlight-row"><td><strong>(III)</strong></td><td>CoTracker3</td><td><strong>AnthroTAP (Ours)</strong></td><td><strong>Anthro-LD</strong></td>
+                            <td class="abl-col-sep"><strong>65.0</strong> <span style="color:#7c3aed">(+1.2)</span></td>
+                            <td><strong>77.3</strong> <span style="color:#7c3aed">(+1.0)</span></td>
+                            <td><strong>90.7</strong> <span style="color:#7c3aed">(+0.5)</span></td></tr>
+                    </tbody></table>`
             },
             {
-                title: 'Comparison of Track Complexity and Diversity with Existing Datasets',
-                desc: 'We ablate the effect of optical flow-based filtering by comparing it with the baseline that uses trajectories projected from the human mesh and occlusion prediction via ray casting. While the baseline already achieves strong performance, applying trajectory rejection yields a further performance boost.',
-                tables: `
-                    <div class="ablation-item">
-                        
-                        <table class="results-table">
-                            <thead>
-                                <tr>
-                                    <th rowspan="2" style="vertical-align:middle;">Training Dataset</th>
-                                    <th rowspan="2" style="vertical-align:middle;">Data Type</th>
-                                    <th colspan="2">Traj Metrics</th>
-                                </tr>
-                                <tr>
-                                    <th>Complexity</th>
-                                    <th>Diversity</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr><td>DriveTrack</td><td>Real</td><td>0.4396</td><td>0.0073</td></tr>
-                                <tr><td>PointOdyssey</td><td>Synthetic</td><td>0.5222</td><td><strong>0.1597</strong></td></tr>
-                                <tr><td>Kubric</td><td>Synthetic</td><td>0.1772</td><td>0.1165</td></tr>
-                                <tr class="separator-row"><td colspan="4"></td></tr>
-                                <tr class="highlight-row">
-                                    <td><strong>Anthro-LD (Ours)</strong></td>
-                                    <td>Real</td>
-                                    <td><strong>1.2492</strong></td>
-                                    <td>0.1008</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                `,
+                title: 'Real-World Diversity Matters More Than Annotation Precision',
+                desc: 'Compared against BlinkVision, a synthetic dataset of human motion with <em>perfect</em> GT annotations. Training on our real-world pseudo-labels achieves larger gains, showing that real-world visual diversity is a more decisive factor than annotation precision.',
+                tables: `<table class="results-table abl-sep-3">
+                    <colgroup><col style="width:30%"><col style="width:40%"><col><col><col></colgroup>
+                    <thead><tr><th>Method</th><th>Datasets</th><th>AJ↑</th><th>&lt;δ<sup>x</sup><sub>avg</sub>↑</th><th>OA↑</th></tr></thead>
+                    <tbody>
+                        <tr><td>LocoTrack</td><td>Kub</td><td>63.0</td><td>75.3</td><td>87.2</td></tr>
+                        <tr><td>LocoTrack + BlinkVision</td><td>Kub + 1.4K <em style="color:var(--color-text-muted)">(synthetic, perfect GT)</em></td><td>64.2</td><td>76.4</td><td>88.8</td></tr>
+                        <tr class="separator-row"><td></td><td></td><td></td><td></td><td></td></tr>
+                        <tr class="highlight-row"><td><strong>LocoTrack + AnthroTAP (Ours)</strong></td>
+                            <td><strong>Kub + 1.4K</strong> <em style="color:var(--color-text-muted)">(real, pseudo-GT)</em></td>
+                            <td><strong>64.8</strong></td><td><strong>77.3</strong></td><td><strong>89.1</strong></td></tr>
+                    </tbody></table>`
+            },
+            {
+                title: 'Pseudo-Label Quality vs. Human Annotations',
+                desc: 'Positional accuracy of AnthroTAP pseudo-labels and LocoTrack predictions evaluated against human-annotated trajectories on Let\'s Dance at five pixel thresholds (δ<sup>0</sup> – δ<sup>4</sup>). AnthroTAP pseudo-labels consistently outperform LocoTrack predictions across all thresholds, validating their quality as training supervision.',
+                tables: `<table class="results-table abl-sep-2">
+                    <colgroup><col style="width:42%"><col><col><col><col><col><col></colgroup>
+                    <thead><tr><th>Method</th><th>&lt;δ<sup>0</sup>↑</th><th>&lt;δ<sup>1</sup>↑</th><th>&lt;δ<sup>2</sup>↑</th><th>&lt;δ<sup>3</sup>↑</th><th>&lt;δ<sup>4</sup>↑</th><th>&lt;δ<sup>x</sup><sub>avg</sub>↑</th></tr></thead>
+                    <tbody>
+                        <tr><td>LocoTrack predictions</td><td>13.2</td><td>36.2</td><td>62.3</td><td>81.0</td><td>87.7</td><td>56.1</td></tr>
+                        <tr class="separator-row"><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+                        <tr class="highlight-row"><td><strong>AnthroTAP pseudo-labels (Ours)</strong></td>
+                            <td><strong>18.0</strong></td><td><strong>43.2</strong></td><td><strong>74.8</strong></td><td><strong>92.4</strong></td><td><strong>94.1</strong></td><td><strong>64.5</strong></td></tr>
+                    </tbody></table>`
             },
             {
                 title: 'Ablation on Optical Flow Based Track Rejection',
-                desc: 'We also provide a comparative analysis of prevalent point tracking training datasets, focusing on trajectory complexity and diversity.',
-                tables: `
-                    <div class="ablation-item">
-                        
-                        <table class="results-table">
-                            <thead>
-                                <tr>
-                                    <th rowspan="2" style="vertical-align:middle;">Method</th>
-                                    <th colspan="3">DAVIS</th>
-                                </tr>
-                                <tr>
-                                    <th>AJ&uarr;</th>
-                                    <th>&lt;&delta;<sup>x</sup><sub>avg</sub>&uarr;</th>
-                                    <th>OA&uarr;</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Baseline</td>
-                                    <td>64.4</td><td>76.9</td><td>88.6</td>
-                                </tr>
-                                <tr class="separator-row"><td colspan="4"></td></tr>
-                                <tr class="highlight-row">
-                                    <td><strong>+ Optical flow based rejection</strong></td>
-                                    <td><strong>64.8</strong></td>
-                                    <td><strong>77.3</strong></td>
-                                    <td><strong>89.1</strong></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                `,
+                desc: 'Adding optical flow based trajectory filtering on top of the HMR + ray-casting baseline provides a consistent performance boost, demonstrating the value of the filtering stage for pseudo-label quality.',
+                tables: `<table class="results-table">
+                    <colgroup><col style="width:42%"><col><col><col></colgroup>
+                    <thead>
+                        <tr>
+                            <th rowspan="2" style="vertical-align:middle">Method</th>
+                            <th colspan="3" class="abl-col-sep">DAVIS</th>
+                        </tr>
+                        <tr>
+                            <th class="abl-col-sep">AJ↑</th>
+                            <th>&lt;δ<sup>x</sup><sub>avg</sub>↑</th>
+                            <th>OA↑</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Baseline (HMR + Ray Casting)</td><td class="abl-col-sep">64.4</td><td>76.9</td><td>88.6</td></tr>
+                        <tr class="separator-row"><td></td><td class="abl-col-sep"></td><td></td><td></td></tr>
+                        <tr class="highlight-row"><td><strong>+ Optical flow based rejection</strong></td>
+                            <td class="abl-col-sep"><strong>64.8</strong></td><td><strong>77.3</strong></td><td><strong>89.1</strong></td></tr>
+                    </tbody></table>`
+            },
+            {
+                title: 'Performance Scales with Training Data Volume',
+                desc: 'Starting from the full 1,400-video dataset, performance remains strong even with substantially reduced subsets. Even with only 250 videos, our method consistently improves over the LocoTrack baseline, demonstrating strong data efficiency.',
+                tables: `<table class="results-table abl-sep-2">
+                    <colgroup><col style="width:42%"><col><col><col></colgroup>
+                    <thead><tr><th>Extra Data</th><th>AJ↑</th><th>&lt;δ<sup>x</sup><sub>avg</sub>↑</th><th>OA↑</th></tr></thead>
+                    <tbody>
+                        <tr><td>None (LocoTrack 384×512 baseline)</td><td>64.8</td><td>77.4</td><td>86.2</td></tr>
+                        <tr class="separator-row"><td></td><td></td><td></td><td></td></tr>
+                        <tr><td>+ Ours (250 videos)</td><td>65.6</td><td>78.5</td><td>87.3</td></tr>
+                        <tr><td>+ Ours (500 videos)</td><td>65.7</td><td>78.7</td><td>87.2</td></tr>
+                        <tr class="highlight-row"><td><strong>+ Ours (1,400 videos, full)</strong></td>
+                            <td><strong>65.9</strong></td><td><strong>78.9</strong></td><td><strong>87.3</strong></td></tr>
+                    </tbody></table>`
             },
         ];
 
-        function renderAblationSlide(item) {
-            return `
-                <div class="results-slide-content">
-                    <h3 class="results-slide-title">${item.title}</h3>
-                    <div class="ablation-full-container">
-                        ${item.tables}
-                    </div>
-                    <div class="results-caption"><p>${item.desc}</p></div>
-                </div>
-            `;
+        function renderAbl(item) {
+            return `<div class="results-slide-content">
+                <h3 class="results-slide-title">${item.title}</h3>
+                <div class="ablation-full-container ablation-item">${item.tables}</div>
+                <div class="results-caption"><p>${item.desc}</p></div>
+            </div>`;
         }
 
-        // Initialize
+        function copyBibtex() {
+            navigator.clipboard.writeText(document.getElementById('bibtex-text').innerText).then(() => {
+                const btn = document.querySelector('.citation-copy-btn');
+                const orig = btn.innerHTML;
+                btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
+                setTimeout(() => btn.innerHTML = orig, 2000);
+            });
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
-            initSidebarScroll();
+            initFadeIn();
             initScrollSpy();
-            initFadeInAnimations();
-            initLazyVideos();
+            initSidebarScroll();
             initTeaserCarousel();
-            new Carousel('carousel-qual', qualData, renderQualSlide);
-            new Carousel('carousel-abl', ablationData, renderAblationSlide);
+            new Carousel('carousel-qual', qualData, renderQual);
+            new Carousel('carousel-abl', ablData, renderAbl);
         });
     </script>
 </body>
-
 </html>
