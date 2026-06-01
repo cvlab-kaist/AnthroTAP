@@ -102,7 +102,7 @@ git clone git@hf.co:datasets/hamacojr/LocoTrack-panning-MOVi-E
 
 ### 2. Prepare AnthroTAP Human Motion Data
 
-This is a work in progress. Please stay tuned.
+Please download data from [Link](https://huggingface.co/datasets/hamacojr/AnthroTAP-LetsDance)
 
 ### 3. Configure Paths
 
