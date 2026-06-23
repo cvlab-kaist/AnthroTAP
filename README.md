@@ -42,7 +42,7 @@ Download the AnthroTAP fine-tuned checkpoint:
 | Model | Pre-trained Weights |
 |-------|---------------------|
 | Anthro-LocoTrack-B | [Link](https://drive.google.com/file/d/1Rj7sIby_ylZkuy4pccAA28dtqvJQUH-A) |
-| Anthro-TAPNext | [Link](TODO) |
+| Anthro-TAPNext | [Link](https://drive.google.com/drive/folders/1OdzorMk1mk1hfRzllejAZ5c8qRn89VRa) |
 
 ```bash
 # Download Anthro-LocoTrack-B with gdown
